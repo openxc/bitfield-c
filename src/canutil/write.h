@@ -4,10 +4,18 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-uint64_t encodeFloat(float value, float offset, float factor, uint8_t bitPosition,
-        uint8_t bitSize);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-uint64_t encodeBoolean(bool value, float offset, float factor,
-                uint8_t bitPosition, uint8_t bitSize);
+uint64_t encodeFloat(float value, uint8_t bitPosition, uint8_t bitSize,
+                float factor, float offset);
+
+uint64_t encodeBoolean(bool value, uint8_t bitPosition, uint8_t bitSize,
+                float factor, float offset);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __WRITE_H__

@@ -4,6 +4,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Public: Reads a subset of bits from a byte array.
  *
  * data - the bytes in question.
@@ -54,5 +58,9 @@ void setBitField(uint64_t* data, uint64_t value, int startPos, int numBits);
  * Returns the requested byte from the source bytes.
  */
 uint8_t nthByte(uint64_t source, int byteNum);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __BITFIELD_H__

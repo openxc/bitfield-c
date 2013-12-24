@@ -19,15 +19,16 @@ SRC = $(wildcard src/**/*.c)
 OBJS = $(SRC:.c=.o)
 TEST_SRC = $(wildcard $(TEST_DIR)/*.c)
 TEST_OBJS = $(TEST_SRC:.c=.o)
+TESTS=$(patsubst %.c,%.bin,$(TEST_SRC))
 
 all: $(OBJS)
 
-test: $(TEST_DIR)/tests.bin
+test: $(TESTS)
 	@set -o $(TEST_SET_OPTS) >/dev/null 2>&1
 	@export SHELLOPTS
 	@sh runtests.sh $(TEST_DIR)
 
-$(TEST_DIR)/tests.bin: $(TEST_OBJS) $(OBJS)
+$(TEST_DIR)/%.bin: $(TEST_DIR)/%.o $(OBJS)
 	@mkdir -p $(dir $@)
 	$(CC) $(LDFLAGS) $(CC_SYMBOLS) $(INCLUDES) -o $@ $^ $(LDLIBS)
 
