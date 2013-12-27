@@ -1,4 +1,5 @@
 #include "write.h"
+#include <bitfield/bitfield.h>
 
 uint64_t encodeFloat(float value, uint8_t bitPosition, uint8_t bitSize,
         float factor, float offset) {
