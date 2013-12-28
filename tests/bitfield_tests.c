@@ -190,6 +190,48 @@ START_TEST(test_nth_byte)
 }
 END_TEST
 
+START_TEST (test_get_byte)
+{
+    uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
+    uint8_t result = getByte(0, data, sizeof(data), ENDIANNESS_BIG_ENDIAN);
+    ck_assert_int_eq(result, 0x12);
+    result = getByte(3, data, sizeof(data), ENDIANNESS_BIG_ENDIAN);
+    ck_assert_int_eq(result, 0x78);
+}
+END_TEST
+
+START_TEST (test_get_nibble)
+{
+    uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
+    uint8_t result = getNibble(0, data, sizeof(data), ENDIANNESS_BIG_ENDIAN);
+    ck_assert_int_eq(result, 0x1);
+    result = getNibble(1, data, sizeof(data), ENDIANNESS_BIG_ENDIAN);
+    ck_assert_int_eq(result, 0x2);
+    result = getNibble(2, data, sizeof(data), ENDIANNESS_BIG_ENDIAN);
+    ck_assert_int_eq(result, 0x3);
+}
+END_TEST
+
+START_TEST (test_get_bits)
+{
+    uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
+    uint8_t result[4];
+    getBits(0, 16, data, 36, ENDIANNESS_BIG_ENDIAN, result);
+    ck_assert_int_eq(result[0], 0x12);
+    ck_assert_int_eq(result[1], 0x34);
+}
+END_TEST
+
+START_TEST (test_get_uneven_bits)
+{
+    uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
+    uint8_t result[4] = {0};
+    getBits(4, 12, data, 36, ENDIANNESS_BIG_ENDIAN, result);
+    ck_assert_int_eq(result[0], 0x2);
+    ck_assert_int_eq(result[1], 0x34);
+}
+END_TEST
+
 Suite* bitfieldSuite(void) {
     Suite* s = suite_create("bitfield");
     TCase *tc_core = tcase_create("core");
@@ -207,6 +249,10 @@ Suite* bitfieldSuite(void) {
     tcase_add_test(tc_core, test_set_off_byte_boundary);
     tcase_add_test(tc_core, test_set_odd_number_of_bits);
     tcase_add_test(tc_core, test_nth_byte);
+    tcase_add_test(tc_core, test_get_byte);
+    tcase_add_test(tc_core, test_get_nibble);
+    tcase_add_test(tc_core, test_get_bits);
+    tcase_add_test(tc_core, test_get_uneven_bits);
     suite_add_tcase(s, tc_core);
 
     return s;

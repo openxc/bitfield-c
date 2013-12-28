@@ -8,6 +8,21 @@
 extern "C" {
 #endif
 
+typedef enum {
+    ENDIANNESS_LITTLE_ENDIAN,
+    ENDIANNESS_BIG_ENDIAN
+} Endianness;
+
+uint8_t getNibble(const uint8_t nibble_index, const uint8_t data[],
+        const uint8_t length, Endianness endianness);
+
+uint8_t getByte(const uint8_t byte_index, const uint8_t data[],
+        const uint8_t length, Endianness endianness);
+
+void getBits(const uint16_t start_index, const uint16_t field_size,
+        const uint8_t data[], const uint8_t length, Endianness endianness,
+        uint8_t* result);
+
 /* Public: Reads a subset of bits from a byte array.
  *
  * data - the bytes in question.
@@ -40,7 +55,7 @@ extern "C" {
  *
  * Returns the value of the requested bit field.
  */
-uint64_t getBitField(uint64_t data, int startPos, int numBits, bool bigEndian);
+uint64_t getBitField(uint64_t data, const uint16_t startPos, const uint16_t numBits, bool bigEndian);
 
 /* Public: Set the bit field in the given data array to the new value.
  *
