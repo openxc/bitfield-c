@@ -81,7 +81,8 @@ The library supports parsing floating point CAN signals as well as booleans.
 
 ## Testing
 
-The library includes a test suite that uses the `check` C unit test library.
+The library includes a test suite that uses the `check` C unit test library. It
+requires the unit testing library `check`.
 
     $ make test
 
