@@ -1,6 +1,29 @@
 CAN Message Utilities for C
 ============
 
+## Bitfield Manipulation
+
+## CAN Signal Encoding
+
+## CAN Signal Decoding
+
+The library supports parsing floating point CAN signals as well as booleans.
+
+    uint64_t payload = 0xeb00000000000000;
+    float result = bitfield_parse_float(payload,
+            2, // starting bit
+            4, // width of the signal's field
+            1001.0, // transformation factor for the signal value
+            -30000.0); // transformation offset for the signal value
+    // result == -19990.0
+
+    bool result = bitfield_parse_bool(payload,
+            0, // starting bit
+            1, // width of the signal's field
+            1.0, // transformation factor for the signal value
+            0); // transformation offset for the signal value
+    // result == true
+
 ## Testing
 
 The library includes a test suite that uses the `check` C unit test library.

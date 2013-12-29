@@ -19,6 +19,14 @@ extern "C" {
 float bitfield_parse_float(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
         float factor, float offset);
 
+/* Public: Parse a CAN signal from a message and interpret it as a boolean.
+ *
+ * signal - The details of the signal to decode and forward.
+ * data   - The raw bytes of the CAN message that contains the signal, assumed
+ *      to be in big-endian byte order from CAN.
+ *
+ * Returns false if the value was 0, otherwise true.
+ */
 bool bitfield_parse_bool(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
         float factor, float offset);
 
