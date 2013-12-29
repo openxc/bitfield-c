@@ -5,10 +5,10 @@
 
 #define NIBBLE_SIZE (CHAR_BIT / 2)
 
-uint8_t getNibble(const uint8_t source[], const uint8_t source_length,
+uint8_t get_nibble(const uint8_t source[], const uint8_t source_length,
                 const uint8_t nibble_index) {
     uint8_t byte_index = nibble_index / 2;
-    uint8_t result = getByte(source, source_length, byte_index);
+    uint8_t result = get_byte(source, source_length, byte_index);
     if(nibble_index % 2 == 0) {
         result >>= NIBBLE_SIZE;
     }
@@ -16,7 +16,7 @@ uint8_t getNibble(const uint8_t source[], const uint8_t source_length,
     return result;
 }
 
-uint8_t getByte(const uint8_t source[], const uint8_t source_length,
+uint8_t get_byte(const uint8_t source[], const uint8_t source_length,
         const uint8_t byte_index) {
     if(byte_index < source_length) {
         return source[byte_index];

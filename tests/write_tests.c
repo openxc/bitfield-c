@@ -27,7 +27,6 @@ START_TEST (test_encode_bool)
     ck_assert_int_eq(value, 0x0000000000000000LLU);
 }
 END_TEST
-// TODO test encode bool
 
 Suite* canwriteSuite(void) {
     Suite* s = suite_create("write");

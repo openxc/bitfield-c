@@ -11,9 +11,9 @@ started, here are examples using the API:
 ## Bitfield Manipulation
 
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
-    uint8_t result = getByte(data, sizeof(data), 0);
-    uint8_t result = getNibble(data, sizeof(data), 0);
-    fail_unless(copyBitsRightAligned(data, 4, 4, 12, result, 4));
+    uint8_t result = get_byte(data, sizeof(data), 0);
+    uint8_t result = get_nibble(data, sizeof(data), 0);
+    fail_unless(copy_bits_right_aligned(data, 4, 4, 12, result, 4));
 
 ## 8 Byte Bitfield Decoding
 

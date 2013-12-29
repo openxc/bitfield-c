@@ -20,7 +20,7 @@ static const uint8_t reverse_mask[] =
 static const uint8_t reverse_mask_xor[] =
     { 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00 };
 
-bool copyBits(const uint8_t* source_origin, const uint16_t source_length,
+bool copy_bits(const uint8_t* source_origin, const uint16_t source_length,
         const uint16_t source_offset, uint16_t bit_count,
         uint8_t* destination_origin, const uint16_t destination_length,
         const uint16_t destination_offset) {
@@ -118,10 +118,10 @@ uint8_t find_end_bit(const uint16_t numBits) {
     return endBit == 0 ? CHAR_BIT : endBit;
 }
 
-bool copyBitsRightAligned(const uint8_t source[], const uint16_t source_length,
+bool copy_bits_right_aligned(const uint8_t source[], const uint16_t source_length,
                 const uint16_t offset, const uint16_t bit_count,
                 uint8_t* destination, const uint16_t destination_length) {
-    return copyBits(source, source_length, offset, bit_count, destination,
+    return copy_bits(source, source_length, offset, bit_count, destination,
             destination_length,
             // provide a proper destination offset so the result is right
             // aligned

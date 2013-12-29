@@ -17,7 +17,7 @@ extern "C" {
  *
  * Returns the retreived nibble, right aligned in a uint8_t.
  */
-uint8_t getNibble(const uint8_t source[], const uint8_t source_length,
+uint8_t get_nibble(const uint8_t source[], const uint8_t source_length,
                 const uint8_t nibble_index);
 
 /* Public: Return a single byte from the byte array, with range checking.
@@ -28,7 +28,7 @@ uint8_t getNibble(const uint8_t source[], const uint8_t source_length,
  *
  * Returns the retreived byte.
  */
-uint8_t getByte(const uint8_t source[], const uint8_t source_length,
+uint8_t get_byte(const uint8_t source[], const uint8_t source_length,
         const uint8_t byte_index);
 
 /* Public: Copy a range of bits from one bit array to another.
@@ -44,7 +44,7 @@ uint8_t getByte(const uint8_t source[], const uint8_t source_length,
  *
  *      uint8_t source[4] = {0x11, 0x22, 0x33, 0x44};
  *      uint8_t destination[4] = {0};
- *      copyBits(source, sizeof(source), 8, 8, destination,
+ *      copy_bits(source, sizeof(source), 8, 8, destination,
  *              sizeof(destination), 0);
  *      // destination[0] == 0x22
  *      // destination[1] == 0x0
@@ -73,7 +73,7 @@ uint8_t getByte(const uint8_t source[], const uint8_t source_length,
  * Returns true if the copy was successful and false if the range exceeded the
  * size of the source or destination, or if the range size negative or 0.
  */
-bool copyBits(const uint8_t* source_origin, const uint16_t source_length,
+bool copy_bits(const uint8_t* source_origin, const uint16_t source_length,
         const uint16_t source_offset, uint16_t bit_count,
         uint8_t* destination_origin, const uint16_t destination_length,
         const uint16_t destination_offset);
@@ -88,7 +88,7 @@ bool copyBits(const uint8_t* source_origin, const uint16_t source_length,
  *
  *      uint8_t source[4] = {0x11, 0x22, 0x33, 0x44};
  *      uint8_t destination[4] = {0};
- *      copyBitsRightAligned(source, sizeof(source), 8, 8, destination,
+ *      copy_bits_right_aligned(source, sizeof(source), 8, 8, destination,
  *              sizeof(destination));
  *      // destination[0] == 0x0
  *      // destination[1] == 0x0
@@ -98,13 +98,13 @@ bool copyBits(const uint8_t* source_origin, const uint16_t source_length,
  *      int value = (int)destination;
  *      // value == 0x22 == 32
  *
- * The arguments are the same as copyBits, but without the destination_offset
+ * The arguments are the same as copy_bits, but without the destination_offset
  * option - that's set automatically to right align the result.
  *
  * Returns true if the copy was successful and false if the range exceeded the
  * size of the source or destination, or if the range size negative or 0.
  */
-bool copyBitsRightAligned(const uint8_t source[], const uint16_t source_length,
+bool copy_bits_right_aligned(const uint8_t source[], const uint16_t source_length,
                 const uint16_t offset, const uint16_t bit_count,
                 uint8_t* destination, const uint16_t destination_length);
 

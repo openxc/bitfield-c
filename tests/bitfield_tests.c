@@ -5,9 +5,9 @@
 START_TEST (test_get_byte)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
-    uint8_t result = getByte(data, sizeof(data), 0);
+    uint8_t result = get_byte(data, sizeof(data), 0);
     ck_assert_int_eq(result, 0x12);
-    result = getByte(data, sizeof(data), 3);
+    result = get_byte(data, sizeof(data), 3);
     ck_assert_int_eq(result, 0x78);
 }
 END_TEST
@@ -15,11 +15,11 @@ END_TEST
 START_TEST (test_get_nibble)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
-    uint8_t result = getNibble(data, sizeof(data), 0);
+    uint8_t result = get_nibble(data, sizeof(data), 0);
     ck_assert_int_eq(result, 0x1);
-    result = getNibble(data, sizeof(data), 1);
+    result = get_nibble(data, sizeof(data), 1);
     ck_assert_int_eq(result, 0x2);
-    result = getNibble(data, sizeof(data), 2);
+    result = get_nibble(data, sizeof(data), 2);
     ck_assert_int_eq(result, 0x3);
 }
 END_TEST
@@ -28,7 +28,7 @@ START_TEST (test_get_bits_out_of_range)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
     uint8_t result[4];
-    fail_if(copyBitsRightAligned(data, 4, 25, 16, result, 4));
+    fail_if(copy_bits_right_aligned(data, 4, 25, 16, result, 4));
 }
 END_TEST
 
@@ -36,7 +36,7 @@ START_TEST (test_get_bits)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
     uint8_t result[4] = {0};
-    fail_unless(copyBitsRightAligned(data, 4, 0, 16, result, 4));
+    fail_unless(copy_bits_right_aligned(data, 4, 0, 16, result, 4));
     ck_assert_int_eq(result[0], 0x12);
     ck_assert_int_eq(result[1], 0x34);
 }
@@ -46,7 +46,7 @@ START_TEST (test_get_uneven_bits)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
     uint8_t result[4] = {0};
-    fail_unless(copyBitsRightAligned(data, 4, 4, 12, result, 4));
+    fail_unless(copy_bits_right_aligned(data, 4, 4, 12, result, 4));
     ck_assert_int_eq(result[0], 0x2);
     ck_assert_int_eq(result[1], 0x34);
 }
