@@ -18,26 +18,28 @@ static uint16_t bits_to_bytes(uint32_t bits) {
     return byte_count;
 }
 
-uint64_t get_bit_field(uint64_t source, const uint16_t startBit,
+uint64_t get_bit_field(uint64_t source, const uint16_t offset,
         const uint16_t bit_count, bool big_endian) {
-    uint8_t result[8] = {0};
+    int startByte = offset / CHAR_BIT;
+    int endByte = (offset + bit_count - 1) / CHAR_BIT;
+
     if(!big_endian) {
         source = __builtin_bswap64(source);
     }
-    copyBitsRightAligned((const uint8_t*)&source, sizeof(source), startBit,
-            bit_count, result, sizeof(result));
-    uint64_t int_result = 0;
 
-    if(!big_endian) {
-        // we need to swap the byte order of the array to get it into a
-        // uint64_t, but it's been right aligned so we have to be more careful
-        for(int i = 0; i < bits_to_bytes(bit_count); i++) {
-            int_result |= result[bits_to_bytes(bit_count) - i - 1] << (CHAR_BIT * i);
+    uint8_t* bytes = (uint8_t*)&source;
+    uint64_t ret = bytes[startByte];
+    if(startByte != endByte) {
+        // The lowest byte address contains the most significant bit.
+        int i;
+        for(i = startByte + 1; i <= endByte; i++) {
+            ret = ret << 8;
+            ret = ret | bytes[i];
         }
-    } else {
-        int_result = *(uint64_t*)result;
     }
-    return int_result;
+
+    ret >>= 8 - find_end_bit(offset + bit_count);
+    return ret & bitmask(bit_count);
 }
 
 bool set_bit_field(uint64_t* destination, uint64_t value, const uint16_t offset,

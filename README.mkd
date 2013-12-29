@@ -1,5 +1,12 @@
 CAN Message Utilities for C
-============
+===========================
+
+This is a C library with functions to help encode and decode Controller Area
+Network (CAN) message payloads. Some of the bitfield functions may be useful for
+other areas, too.
+
+The header files contain complete function documentation, but to get you
+started, here are examples using the API:
 
 ## Bitfield Manipulation
 
@@ -8,11 +15,31 @@ CAN Message Utilities for C
     uint8_t result = getNibble(data, sizeof(data), 0);
     fail_unless(copyBitsRightAligned(data, 4, 4, 12, result, 4));
 
-## 8 Byte Bitfield Manipulation
+## 8 Byte Bitfield Decoding
+
+    uint64_t data = 0x8000000000000000;
+    uint64_t result = get_bit_field(data, 0, 1, false);
+    // result == 0x1
+
+    data = 0x0402574d555a0401;
+    result = get_bit_field(data, 16, 32, false);
+    // result = 0x574d555a;
+
+    data = 0x00000000F34DFCFF;
+    result = nth_byte(data, 0);
+    //result = 0x0
+
+    result = nth_byte(data, 4);
+    //result = 0xF3
+
+## 8 Byte Bitfield Encoding
+
+    uint64_t data = 0;
+    fail_unless(set_bit_field(&data, 1, 0, 1));
+    uint64_t result = get_bit_field(data, 0, 1, false);
+    ck_assert_int_eq(result, 0x1);
 
 TODO setting bit fields is just copying
-TODO bring back old uint64_t implementation of getBitField if it's faster /
-    simpler
 
 ## CAN Signal Encoding
 

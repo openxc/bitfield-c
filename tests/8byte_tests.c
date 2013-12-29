@@ -56,10 +56,10 @@ START_TEST (test_one_byte)
     uint64_t data = 0xFA00000000000000;
     uint64_t result = get_bit_field(data, 0, 4, false);
     fail_unless(result == 0xF,
-            "First 4 bits in 0x%llx was 0x%llx instead of 0xF", data, result);
+            "First nibble in 0x%llx was 0x%llx instead of 0xF", data, result);
     result = get_bit_field(data, 4, 4, false);
     fail_unless(result == 0xA,
-            "First 4 bits in 0x%llx was 0x%llx instead of 0xA", data, result);
+            "Second nibble in 0x%llx was 0x%llx instead of 0xA", data, result);
     result = get_bit_field(data, 0, 8, false);
     fail_unless(result == 0xFA,
             "All bits in 0x%llx were 0x%llx instead of 0x%llx", data, result, data);

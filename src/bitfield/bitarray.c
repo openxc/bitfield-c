@@ -113,7 +113,7 @@ bool copyBits(const uint8_t* source_origin, const uint16_t source_length,
  *
  * Returns: a bit position from 0 to 7.
  */
-static uint8_t findEndBit(const uint16_t startBit, const uint16_t numBits) {
+uint8_t find_end_bit(const uint16_t numBits) {
     int endBit = numBits % CHAR_BIT;
     return endBit == 0 ? CHAR_BIT : endBit;
 }
@@ -125,5 +125,5 @@ bool copyBitsRightAligned(const uint8_t source[], const uint16_t source_length,
             destination_length,
             // provide a proper destination offset so the result is right
             // aligned
-            CHAR_BIT - findEndBit(offset, bit_count));
+            CHAR_BIT - find_end_bit(bit_count));
 }

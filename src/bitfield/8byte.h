@@ -18,7 +18,7 @@ extern "C" {
  *
  * source - the bytes in question.
  * offset - the starting index of the bit field (beginning from 0).
- * numBits - the width of the bit field to extract.
+ * bit_count - the width of the bit field to extract.
  * big_endian - if the data passed in is little endian, set this to false and it
  *      will be flipped before grabbing the bit field.
  *
@@ -44,7 +44,7 @@ extern "C" {
  *
  *  uint64_t value = get_bit_field(data, 2, 4);
  *
- * Returns the value of the requested bit field.
+ * Returns the value of the requested bit field, right aligned in a uint64_t.
  */
 uint64_t get_bit_field(uint64_t source, const uint16_t offset,
         const uint16_t bit_count, bool big_endian);
@@ -70,6 +70,10 @@ bool set_bit_field(uint64_t* destination, uint64_t value, const uint16_t offset,
  * Returns the requested byte from the source bytes.
  */
 uint8_t nth_byte(const uint64_t source, const uint16_t byte_index);
+
+/* Private: Determine the index of the last bit used.
+ */
+uint8_t find_end_bit(const uint16_t num_bits);
 
 #ifdef __cplusplus
 }
