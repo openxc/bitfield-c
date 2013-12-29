@@ -25,7 +25,7 @@ START_TEST (test_one_bit)
     uint64_t data = 0x8000000000000000;
     uint64_t result = getBitField(data, 0, 1, false);
     fail_unless(result == 0x1,
-            "First bits in 0x%X was 0x%X instead of 0x1", data, result);
+            "First bit in 0x%llx was 0x%llx instead of 0x1", data, result);
 }
 END_TEST
 
@@ -35,7 +35,7 @@ START_TEST (test_32_bit_parse)
     uint64_t result = getBitField(data, 16, 32, false);
     uint64_t expectedValue = 0x574d555a;
     fail_unless(result == expectedValue,
-            "Field retrieved in 0x%X was 0x%X instead of %d", data,
+            "Field retrieved in 0x%llx was 0x%llx instead of 0x%llx", data,
             result, expectedValue);
 }
 END_TEST
@@ -46,7 +46,7 @@ START_TEST (test_16_bit_parse)
     uint64_t result = getBitField(data, 16, 16, false);
     uint64_t expectedValue = 0xFCFF;
     fail_unless(result == expectedValue,
-            "Field retrieved in 0x%X was 0x%X instead of %d", data,
+            "Field retrieved in 0x%llx was 0x%llx instead of 0x%llx", data,
             result, expectedValue);
 }
 END_TEST
@@ -56,13 +56,13 @@ START_TEST (test_one_byte)
     uint64_t data = 0xFA00000000000000;
     uint64_t result = getBitField(data, 0, 4, false);
     fail_unless(result == 0xF,
-            "First 4 bits in 0x%X was 0x%X instead of 0xF", data, result);
+            "First 4 bits in 0x%llx was 0x%llx instead of 0xF", data, result);
     result = getBitField(data, 4, 4, false);
     fail_unless(result == 0xA,
-            "First 4 bits in 0x%X was 0x%X instead of 0xA", data, result);
+            "First 4 bits in 0x%llx was 0x%llx instead of 0xA", data, result);
     result = getBitField(data, 0, 8, false);
     fail_unless(result == 0xFA,
-            "All bits in 0x%X were 0x%X instead of 0x%X", data, result, data);
+            "All bits in 0x%llx were 0x%llx instead of 0x%llx", data, result, data);
 }
 END_TEST
 
@@ -71,19 +71,19 @@ START_TEST (test_multi_byte)
     uint64_t data = 0x12FA000000000000;
     uint64_t result = getBitField(data, 0, 4, false);
     fail_unless(result == 0x1,
-            "First 4 bits in 0x%X was 0x%X instead of 0xF", (data >> 60) & 0xF,
+            "First 4 bits in 0x%llx was 0x%llx instead of 0xF", (data >> 60) & 0xF,
             result);
     result = getBitField(data, 4, 4, false);
     fail_unless(result == 0x2,
-            "Second 4 bits in 0x%X was %d instead of 0xA", (data >> 56) & 0xF,
+            "Second 4 bits in 0x%llx was 0x%llx instead of 0xA", (data >> 56) & 0xF,
             result);
     result = getBitField(data, 8, 4, false);
     fail_unless(result == 0xF,
-            "First 4 bits in 0x%X was %d instead of 0x1", (data >> 52) & 0xF,
+            "First 4 bits in 0x%llx was 0x%llx instead of 0x1", (data >> 52) & 0xF,
             result);
     result = getBitField(data, 12, 4, false);
     fail_unless(result == 0xA,
-            "Second 4 bits in 0x%X was %d instead of 0x2", (data >> 48) % 0xF,
+            "Second 4 bits in 0x%llx was 0x%llx instead of 0x2", (data >> 48) % 0xF,
             result);
 }
 END_TEST
@@ -127,13 +127,13 @@ START_TEST (test_set_doesnt_clobber_existing_data)
     setBitField(&data, 0x4fc8, 16, 16);
     uint64_t result = getBitField(data, 16, 16, false);
     fail_unless(result == 0x4fc8,
-            "Field retrieved in 0x%X was 0x%X instead of 0x%X", data, result,
+            "Field retrieved in 0x%llx was 0x%llx instead of 0x%x", data, result,
             0xc84f);
 
     data = 0x8000000000000000;
     setBitField(&data, 1, 21, 1);
     fail_unless(data == 0x8000040000000000LLU,
-            "Expected combined value 0x8000040000000000 but got 0x%X%X",
+            "Expected combined value 0x8000040000000000 but got 0x%llx%llx",
             data >> 32, data);
 }
 END_TEST
@@ -153,14 +153,14 @@ START_TEST (test_set_odd_number_of_bits)
     setBitField(&data, 0x12, 11, 5);
     uint64_t result = getBitField(data, 11, 5, false);
     fail_unless(result == 0x12,
-            "Field set in 0x%X%X%X%X was %d instead of %d", data, result,
+            "Field set in 0x%llx%llx%llx%llx was 0x%llx instead of 0x%llx", data, result,
             0x12);
 
     data = 0xFFFC4DF300000000LLU;
     setBitField(&data, 0x2, 11, 5);
     result = getBitField(data, 11, 5, false);
     fail_unless(result == 0x2,
-            "Field set in 0x%X%X%X%X was %d instead of %d", data, result,
+            "Field set in 0x%llx%llx%llx%llx was 0x%llx instead of 0x%llx", data, result,
             0x2);
 }
 END_TEST

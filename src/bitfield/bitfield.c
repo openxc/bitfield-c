@@ -23,7 +23,7 @@
  * Returns: a bit position from 0 to 7.
  */
 static uint8_t findEndBit(const uint16_t startBit, const uint16_t numBits) {
-    int endBit = (startBit + numBits) % CHAR_BIT;
+    int endBit = numBits % CHAR_BIT;
     return endBit == 0 ? CHAR_BIT : endBit;
 }
 
@@ -38,8 +38,6 @@ static int byteForBit(const uint16_t startBit) {
  */
 static void bitarray_copy(const uint8_t* source_origin, int source_offset,
         int source_length, uint8_t* destination_origin, int destination_offset) {
-    static const uint8_t mask[] =
-        { 0x55, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff };
     static const uint8_t reverse_mask[] =
         { 0x55, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff };
     static const uint8_t reverse_mask_xor[] =
@@ -49,21 +47,14 @@ static void bitarray_copy(const uint8_t* source_origin, int source_offset,
         return;
     }
 
-    int source_offset_modulo;
-    int destination_offset_modulo;
-
     const uint8_t* source = source_origin + byteForBit(source_offset);
     uint8_t* destination = destination_origin + byteForBit(destination_offset);
-
-    source_offset_modulo = source_offset % CHAR_BIT;
-    destination_offset_modulo = destination_offset % CHAR_BIT;
+    int source_offset_modulo = source_offset % CHAR_BIT;
+    int destination_offset_modulo = destination_offset % CHAR_BIT;
 
     if(source_offset_modulo == destination_offset_modulo) {
-        if(source_offset_modulo) {
-            uint8_t c;
-
-            c = reverse_mask_xor[destination_offset_modulo]     & *source++;
-
+        if(source_offset_modulo > 0) {
+            uint8_t c = reverse_mask_xor[destination_offset_modulo] & *source++;
             PREPARE_FIRST_COPY();
             *destination++ |= c;
         }
@@ -71,35 +62,36 @@ static void bitarray_copy(const uint8_t* source_origin, int source_offset,
         int byte_len = source_length / CHAR_BIT;
         int source_length_modulo = source_length % CHAR_BIT;
 
-        if(byte_len) {
+        if(byte_len > 0) {
             memcpy(destination, source, byte_len);
             source += byte_len;
             destination += byte_len;
         }
-        if(source_length_modulo) {
-            *destination     &= reverse_mask_xor[source_length_modulo];
-            *destination |= reverse_mask[source_length_modulo]     & *source;
+
+        if(source_length_modulo > 0) {
+            *destination &= reverse_mask_xor[source_length_modulo];
+            *destination |= reverse_mask[source_length_modulo] & *source;
         }
     } else {
-        int bit_diff_ls;
-        int bit_diff_rs;
+        int bit_diff_left_shift;
+        int bit_diff_right_shift;
         uint8_t c;
         /*
          * Begin: Line things up on destination.
          */
-        if (source_offset_modulo > destination_offset_modulo) {
-            bit_diff_ls = source_offset_modulo - destination_offset_modulo;
-            bit_diff_rs = CHAR_BIT - bit_diff_ls;
+        if(source_offset_modulo > destination_offset_modulo) {
+            bit_diff_left_shift = source_offset_modulo - destination_offset_modulo;
+            bit_diff_right_shift = CHAR_BIT - bit_diff_left_shift;
 
-            c = *source++ << bit_diff_ls;
-            c |= *source >> bit_diff_rs;
-            c     &= reverse_mask_xor[destination_offset_modulo];
+            c = *source++ << bit_diff_left_shift;
+            c |= *source >> bit_diff_right_shift;
+            c &= reverse_mask_xor[destination_offset_modulo];
         } else {
-            bit_diff_rs = destination_offset_modulo - source_offset_modulo;
-            bit_diff_ls = CHAR_BIT - bit_diff_rs;
+            bit_diff_right_shift = destination_offset_modulo - source_offset_modulo;
+            bit_diff_left_shift = CHAR_BIT - bit_diff_right_shift;
 
-            c = *source >> bit_diff_rs     &
-                reverse_mask_xor[destination_offset_modulo];
+            c = *source >> bit_diff_right_shift &
+                    reverse_mask_xor[destination_offset_modulo];
         }
         PREPARE_FIRST_COPY();
         *destination++ |= c;
@@ -108,10 +100,9 @@ static void bitarray_copy(const uint8_t* source_origin, int source_offset,
          * Middle: copy with only shifting the source.
          */
         int byte_len = source_length / CHAR_BIT;
-
         while(--byte_len >= 0) {
-            c = *source++ << bit_diff_ls;
-            c |= *source >> bit_diff_rs;
+            c = *source++ << bit_diff_left_shift;
+            c |= *source >> bit_diff_right_shift;
             *destination++ = c;
         }
 
@@ -119,9 +110,9 @@ static void bitarray_copy(const uint8_t* source_origin, int source_offset,
          * End: copy the remaing bits;
          */
         int source_length_modulo = source_length % CHAR_BIT;
-        if(source_length_modulo) {
-            c = *source++ << bit_diff_ls;
-            c |= *source >> bit_diff_rs;
+        if(source_length_modulo > 0) {
+            c = *source++ << bit_diff_left_shift;
+            c |= *source >> bit_diff_right_shift;
             c &= reverse_mask[source_length_modulo];
 
             *destination &= reverse_mask_xor[source_length_modulo];
@@ -136,12 +127,30 @@ uint64_t bitmask(const uint8_t numBits) {
 
 uint64_t getBitField(uint64_t data, const uint16_t startBit,
         const uint16_t numBits, bool bigEndian) {
-    uint64_t result;
+    uint8_t result[8] = {0};
+    if(!bigEndian) {
+        data = __builtin_bswap64(data);
+    }
     getBits(startBit, numBits, (const uint8_t*)&data,
             CHAR_BIT * sizeof(uint64_t),
             bigEndian ? ENDIANNESS_BIG_ENDIAN : ENDIANNESS_LITTLE_ENDIAN,
-            &result);
-    return result;
+            result);
+    // TODO the result has already been shifted to be aligned right, so if we
+    // try and bswap here it's going to be screwed up unless it was byte aligned
+    uint64_t int_result = 0;
+    // TODO should the API return the byte length of data in the result array?
+    // i think yes.
+    uint8_t byte_count = numBits / CHAR_BIT;
+    if(numBits % CHAR_BIT != 0) {
+        ++byte_count;
+    }
+
+    // TODO wow, can't believe this works, but something is clearly wrong with
+    // the API!
+    for(int i = 0; i < byte_count; i++) {
+        int_result |= result[byte_count - i - 1] << (CHAR_BIT * i);
+    }
+    return int_result;
 }
 
 /**
@@ -185,5 +194,6 @@ uint8_t getByte(const uint8_t byte_index, const uint8_t data[],
 void getBits(const uint16_t start_index, const uint16_t field_size,
         const uint8_t data[], const uint8_t length, Endianness endianness,
         uint8_t* result) {
-    bitarray_copy(data, start_index, field_size, result, 0);
+    bitarray_copy(data, start_index, field_size, result,
+            CHAR_BIT - findEndBit(start_index, field_size));
 }
