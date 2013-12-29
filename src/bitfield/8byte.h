@@ -87,15 +87,6 @@ uint8_t eightbyte_get_byte(const uint64_t source, const uint8_t byte_index,
 bool set_bit_field(uint64_t* destination, uint64_t value, const uint16_t offset,
         const uint16_t bit_count);
 
-/* Public: Retreive the nth byte out of 8 bytes in a uint64_t.
- *
- * source - the source data to retreive the byte from.
- * byte_index - the index of the byte, starting at 0 and assuming big-endian order.
- *
- * Returns the requested byte from the source bytes.
- */
-uint8_t nth_byte(const uint64_t source, const uint16_t byte_index);
-
 /* Private: Determine the index of the last bit used.
  */
 uint8_t find_end_bit(const uint16_t num_bits);
