@@ -6,6 +6,9 @@ START_TEST (test_encode_can_signal)
 {
     uint64_t value = bitfield_encode_float(0, 1, 3, 1, 0);
     ck_assert_int_eq(value, 0);
+
+    value = bitfield_encode_float(1, 1, 3, 1, 0);
+    ck_assert_int_eq(value, 0x1000000000000000LLU);
 }
 END_TEST
 
@@ -16,11 +19,22 @@ START_TEST (test_encode_can_signal_rounding_precision)
 }
 END_TEST
 
+START_TEST (test_encode_bool)
+{
+    uint64_t value = bitfield_encode_bool(true, 1, 3);
+    ck_assert_int_eq(value, 0x1000000000000000LLU);
+    value = bitfield_encode_bool(false, 1, 3);
+    ck_assert_int_eq(value, 0x0000000000000000LLU);
+}
+END_TEST
+// TODO test encode bool
+
 Suite* canwriteSuite(void) {
     Suite* s = suite_create("write");
     TCase *tc_core = tcase_create("core");
     tcase_add_checked_fixture(tc_core, NULL, NULL);
     tcase_add_test(tc_core, test_encode_can_signal);
+    tcase_add_test(tc_core, test_encode_bool);
     tcase_add_test(tc_core, test_encode_can_signal_rounding_precision);
     suite_add_tcase(s, tc_core);
 

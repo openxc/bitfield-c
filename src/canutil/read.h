@@ -10,20 +10,28 @@ extern "C" {
 
 /* Public: Parse a CAN signal from a message and apply required transformation.
  *
- * signal - The details of the signal to decode and forward.
- * data   - The raw bytes of the CAN message that contains the signal, assumed
- *      to be in big-endian byte order from CAN.
+ * data - the payload containing the signal.
+ * bit_offset - the starting bit for the signal.
+ * bit_size - the width of the signal.
+ * factor - the transformation factor for the signal value, applied after
+ *      pulling out the bit field. Use 1.0 for no factor.
+ * offset - the transformation offset for the signal value, applied after
+ *      pulling out the bit field. Use 0 for no offset.
  *
- * Returns the final, transformed value of the signal.
+ * Returns the decoded and transformed value of the signal.
  */
 float bitfield_parse_float(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
         float factor, float offset);
 
 /* Public: Parse a CAN signal from a message and interpret it as a boolean.
  *
- * signal - The details of the signal to decode and forward.
- * data   - The raw bytes of the CAN message that contains the signal, assumed
- *      to be in big-endian byte order from CAN.
+ * data - the payload containing the signal.
+ * bit_offset - the starting bit for the signal.
+ * bit_size - the width of the signal.
+ * factor - the transformation factor for the signal value, applied after
+ *      pulling out the bit field. Use 1.0 for no factor.
+ * offset - the transformation offset for the signal value, applied after
+ *      pulling out the bit field. Use 0 for no offset.
  *
  * Returns false if the value was 0, otherwise true.
  */
