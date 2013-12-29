@@ -193,9 +193,9 @@ END_TEST
 START_TEST (test_get_byte)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
-    uint8_t result = getByte(0, data, sizeof(data), ENDIANNESS_BIG_ENDIAN);
+    uint8_t result = getByte(0, data, sizeof(data));
     ck_assert_int_eq(result, 0x12);
-    result = getByte(3, data, sizeof(data), ENDIANNESS_BIG_ENDIAN);
+    result = getByte(3, data, sizeof(data));
     ck_assert_int_eq(result, 0x78);
 }
 END_TEST
@@ -203,20 +203,28 @@ END_TEST
 START_TEST (test_get_nibble)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
-    uint8_t result = getNibble(0, data, sizeof(data), ENDIANNESS_BIG_ENDIAN);
+    uint8_t result = getNibble(0, data, sizeof(data));
     ck_assert_int_eq(result, 0x1);
-    result = getNibble(1, data, sizeof(data), ENDIANNESS_BIG_ENDIAN);
+    result = getNibble(1, data, sizeof(data));
     ck_assert_int_eq(result, 0x2);
-    result = getNibble(2, data, sizeof(data), ENDIANNESS_BIG_ENDIAN);
+    result = getNibble(2, data, sizeof(data));
     ck_assert_int_eq(result, 0x3);
+}
+END_TEST
+
+START_TEST (test_get_bits_out_of_range)
+{
+    uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
+    uint8_t result[4];
+    fail_if(copyBitsRightAligned(data, 4, 25, 16, result, 4));
 }
 END_TEST
 
 START_TEST (test_get_bits)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
-    uint8_t result[4];
-    getBits(0, 16, data, 36, ENDIANNESS_BIG_ENDIAN, result);
+    uint8_t result[4] = {0};
+    fail_unless(copyBitsRightAligned(data, 4, 0, 16, result, 4));
     ck_assert_int_eq(result[0], 0x12);
     ck_assert_int_eq(result[1], 0x34);
 }
@@ -226,7 +234,7 @@ START_TEST (test_get_uneven_bits)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
     uint8_t result[4] = {0};
-    getBits(4, 12, data, 36, ENDIANNESS_BIG_ENDIAN, result);
+    fail_unless(copyBitsRightAligned(data, 4, 4, 12, result, 4));
     ck_assert_int_eq(result[0], 0x2);
     ck_assert_int_eq(result[1], 0x34);
 }
@@ -252,6 +260,7 @@ Suite* bitfieldSuite(void) {
     tcase_add_test(tc_core, test_get_byte);
     tcase_add_test(tc_core, test_get_nibble);
     tcase_add_test(tc_core, test_get_bits);
+    tcase_add_test(tc_core, test_get_bits_out_of_range);
     tcase_add_test(tc_core, test_get_uneven_bits);
     suite_add_tcase(s, tc_core);
 
