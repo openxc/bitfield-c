@@ -18,8 +18,21 @@ static uint16_t bits_to_bytes(uint32_t bits) {
     return byte_count;
 }
 
+uint8_t eightbyte_get_nibble(const uint64_t source, const uint8_t nibble_index,
+        const bool big_endian) {
+    return get_bit_field(source, NIBBLE_SIZE * nibble_index, NIBBLE_SIZE,
+            big_endian);
+}
+
+uint8_t eightbyte_get_byte(const uint64_t source, const uint8_t byte_index,
+        const bool big_endian) {
+    // TODO we're not handling swapped endianness - we could use get_bit_field
+    // but this might be more efficient
+    return (source >> (EIGHTBYTE_BIT - ((byte_index + 1) * CHAR_BIT))) & 0xFF;
+}
+
 uint64_t get_bit_field(uint64_t source, const uint16_t offset,
-        const uint16_t bit_count, bool big_endian) {
+        const uint16_t bit_count, const bool big_endian) {
     int startByte = offset / CHAR_BIT;
     int endByte = (offset + bit_count - 1) / CHAR_BIT;
 
@@ -54,8 +67,3 @@ bool set_bit_field(uint64_t* destination, uint64_t value, const uint16_t offset,
     *destination |= value;
     return true;
 }
-
-uint8_t nth_byte(const uint64_t source, const uint16_t byte_index) {
-    return (source >> (EIGHTBYTE_BIT - ((byte_index + 1) * CHAR_BIT))) & 0xFF;
-}
-

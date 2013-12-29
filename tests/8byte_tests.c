@@ -172,27 +172,56 @@ START_TEST (test_set_odd_number_of_bits)
 }
 END_TEST
 
-START_TEST(test_nth_byte)
+START_TEST(test_eightbyte_get_byte)
 {
     uint64_t data = 0x00000000F34DFCFF;
-    uint8_t result = nth_byte(data, 0);
+    uint8_t result = eightbyte_get_byte(data, 0, false);
     uint8_t expected = 0x0;
     ck_assert_int_eq(result, expected);
 
-    result = nth_byte(data, 4);
+    result = eightbyte_get_byte(data, 4, false);
     expected = 0xF3;
     ck_assert_int_eq(result, expected);
 
-    result = nth_byte(data, 5);
+    result = eightbyte_get_byte(data, 5, false);
     expected = 0x4D;
     ck_assert_int_eq(result, expected);
 
-    result = nth_byte(data, 6);
+    result = eightbyte_get_byte(data, 6, false);
     expected = 0xFC;
     ck_assert_int_eq(result, expected);
 
-    result = nth_byte(data, 7);
+    result = eightbyte_get_byte(data, 7, false);
     expected = 0xFF;
+    ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(test_eightbyte_get_nibble)
+{
+    uint64_t data = 0x00000000F34DFCFF;
+    uint8_t result = eightbyte_get_nibble(data, 0, false);
+    uint8_t expected = 0x0;
+    ck_assert_int_eq(result, expected);
+
+    result = eightbyte_get_nibble(data, 2, false);
+    expected = 0x0;
+    ck_assert_int_eq(result, expected);
+
+    result = eightbyte_get_nibble(data, 8, false);
+    expected = 0xF;
+    ck_assert_int_eq(result, expected);
+
+    result = eightbyte_get_nibble(data, 9, false);
+    expected = 0x3;
+    ck_assert_int_eq(result, expected);
+
+    result = eightbyte_get_nibble(data, 10, false);
+    expected = 0x4;
+    ck_assert_int_eq(result, expected);
+
+    result = eightbyte_get_nibble(data, 13, false);
+    expected = 0xC;
     ck_assert_int_eq(result, expected);
 }
 END_TEST
@@ -214,7 +243,8 @@ Suite* bitfieldSuite(void) {
     tcase_add_test(tc_core, test_set_doesnt_clobber_existing_data);
     tcase_add_test(tc_core, test_set_off_byte_boundary);
     tcase_add_test(tc_core, test_set_odd_number_of_bits);
-    tcase_add_test(tc_core, test_nth_byte);
+    tcase_add_test(tc_core, test_eightbyte_get_nibble);
+    tcase_add_test(tc_core, test_eightbyte_get_byte);
     suite_add_tcase(s, tc_core);
 
     return s;

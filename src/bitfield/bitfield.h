@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define NIBBLE_SIZE (CHAR_BIT / 2)
+
 #ifdef __cplusplus
 extern "C" {
 #endif

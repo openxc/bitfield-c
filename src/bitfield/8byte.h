@@ -47,7 +47,32 @@ extern "C" {
  * Returns the value of the requested bit field, right aligned in a uint64_t.
  */
 uint64_t get_bit_field(uint64_t source, const uint16_t offset,
-        const uint16_t bit_count, bool big_endian);
+        const uint16_t bit_count, const bool big_endian);
+
+/* Public: Return a single nibble from the payload, with range checking.
+ *
+ * source - the source payload.
+ * nibble_index - the index of the nibble to retreive. The leftmost nibble is
+ *      index 0.
+ * big_endian - if the data passed in is little endian, set this to false and it
+ *      will be flipped before grabbing the bit field.
+ *
+ * Returns the retreived nibble, right aligned in a uint8_t.
+ */
+uint8_t eightbyte_get_nibble(const uint64_t source, const uint8_t nibble_index,
+                const bool big_endian);
+
+/* Public: Return a single byte from the payload, with range checking.
+ *
+ * source - the source byte array.
+ * byte_index - the index of the byte to retreive. The leftmost byte is index 0.
+ * big_endian - if the data passed in is little endian, set this to false and it
+ *      will be flipped before grabbing the bit field.
+ *
+ * Returns the retreived byte.
+ */
+uint8_t eightbyte_get_byte(const uint64_t source, const uint8_t byte_index,
+                const bool big_endian);
 
 /* Public: Set the bit field in the given data array to the new value.
  *

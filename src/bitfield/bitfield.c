@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stddef.h>
 
-#define NIBBLE_SIZE (CHAR_BIT / 2)
-
 uint8_t get_nibble(const uint8_t source[], const uint8_t source_length,
                 const uint8_t nibble_index) {
     uint8_t byte_index = nibble_index / 2;

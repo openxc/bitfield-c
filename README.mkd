@@ -12,8 +12,13 @@ started, here are examples using the API:
 
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
     uint8_t result = get_byte(data, sizeof(data), 0);
-    uint8_t result = get_nibble(data, sizeof(data), 0);
-    fail_unless(copy_bits_right_aligned(data, 4, 4, 12, result, 4));
+    // result = 0x12;
+    result = get_nibble(data, sizeof(data), 0);
+    // result = 0x1;
+    bool success = copy_bits_right_aligned(data, 4, 4, 12, result, 4)
+    // success == true
+    // result[0] == 0x2
+    // result[1] == 0x34
 
 ## 8 Byte Bitfield Decoding
 
@@ -26,11 +31,14 @@ started, here are examples using the API:
     // result = 0x574d555a;
 
     data = 0x00000000F34DFCFF;
-    result = nth_byte(data, 0);
+    result = eightbyte_get_byte(data, 0, false);
     //result = 0x0
 
-    result = nth_byte(data, 4);
+    result = eightbyte_get_byte(data, 4, false);
     //result = 0xF3
+
+    result = eightbyte_get_nibble(data, 10, false);
+    //result = 0x4;
 
 ## 8 Byte Bitfield Encoding
 
