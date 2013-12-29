@@ -103,19 +103,26 @@ START_TEST (test_get_off_byte_boundary)
     ck_assert_int_eq(result, 0x01);
 } END_TEST
 
+START_TEST (test_set_wont_fit)
+{
+    uint64_t data = 0;
+    fail_if(set_bit_field(&data, 100, 0, 1));
+}
+END_TEST
+
 START_TEST (test_set_field)
 {
     uint64_t data = 0;
-    set_bit_field(&data, 1, 0, 1);
+    fail_unless(set_bit_field(&data, 1, 0, 1));
     uint64_t result = get_bit_field(data, 0, 1, false);
     ck_assert_int_eq(result, 0x1);
     data = 0;
-    set_bit_field(&data, 1, 1, 1);
+    fail_unless(set_bit_field(&data, 1, 1, 1));
     result = get_bit_field(data, 1, 1, false);
     ck_assert_int_eq(result, 0x1);
 
     data = 0;
-    set_bit_field(&data, 0xf, 3, 4);
+    fail_unless(set_bit_field(&data, 0xf, 3, 4));
     result = get_bit_field(data, 3, 4, false);
     ck_assert_int_eq(result, 0xf);
 }
@@ -124,14 +131,14 @@ END_TEST
 START_TEST (test_set_doesnt_clobber_existing_data)
 {
     uint64_t data = 0xFFFC4DF300000000;
-    set_bit_field(&data, 0x4fc8, 16, 16);
+    fail_unless(set_bit_field(&data, 0x4fc8, 16, 16));
     uint64_t result = get_bit_field(data, 16, 16, false);
     fail_unless(result == 0x4fc8,
             "Field retrieved in 0x%llx was 0x%llx instead of 0x%x", data, result,
             0xc84f);
 
     data = 0x8000000000000000;
-    set_bit_field(&data, 1, 21, 1);
+    fail_unless(set_bit_field(&data, 1, 21, 1));
     fail_unless(data == 0x8000040000000000LLU,
             "Expected combined value 0x8000040000000000 but got 0x%llx%llx",
             data >> 32, data);
@@ -141,7 +148,7 @@ END_TEST
 START_TEST (test_set_off_byte_boundary)
 {
     uint64_t data = 0xFFFC4DF300000000;
-    set_bit_field(&data, 0x12, 12, 8);
+    fail_unless(set_bit_field(&data, 0x12, 12, 8));
     uint64_t result = get_bit_field(data, 12, 12, false);
     ck_assert_int_eq(result,0x12d);
 }
@@ -150,14 +157,14 @@ END_TEST
 START_TEST (test_set_odd_number_of_bits)
 {
     uint64_t data = 0xFFFC4DF300000000LLU;
-    set_bit_field(&data, 0x12, 11, 5);
+    fail_unless(set_bit_field(&data, 0x12, 11, 5));
     uint64_t result = get_bit_field(data, 11, 5, false);
     fail_unless(result == 0x12,
             "Field set in 0x%llx%llx%llx%llx was 0x%llx instead of 0x%llx", data, result,
             0x12);
 
     data = 0xFFFC4DF300000000LLU;
-    set_bit_field(&data, 0x2, 11, 5);
+    fail_unless(set_bit_field(&data, 0x2, 11, 5));
     result = get_bit_field(data, 11, 5, false);
     fail_unless(result == 0x2,
             "Field set in 0x%llx%llx%llx%llx was 0x%llx instead of 0x%llx", data, result,
@@ -202,6 +209,7 @@ Suite* bitfieldSuite(void) {
     tcase_add_test(tc_core, test_multi_byte);
     tcase_add_test(tc_core, test_get_multi_byte);
     tcase_add_test(tc_core, test_get_off_byte_boundary);
+    tcase_add_test(tc_core, test_set_wont_fit);
     tcase_add_test(tc_core, test_set_field);
     tcase_add_test(tc_core, test_set_doesnt_clobber_existing_data);
     tcase_add_test(tc_core, test_set_off_byte_boundary);

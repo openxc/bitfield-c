@@ -55,8 +55,11 @@ uint64_t get_bit_field(uint64_t source, const uint16_t offset,
  * value - the value to set in the bit field.
  * offset - the starting index of the bit field (beginning from 0).
  * bit_count - the number of bits to set in the data.
+ *
+ * Returns true if the bit_count is enough to fully represent the value, and
+ *      false if it will not fit.
  */
-void set_bit_field(uint64_t* destination, uint64_t value, const uint16_t offset,
+bool set_bit_field(uint64_t* destination, uint64_t value, const uint16_t offset,
         const uint16_t bit_count);
 
 /* Public: Retreive the nth byte out of 8 bytes in a uint64_t.

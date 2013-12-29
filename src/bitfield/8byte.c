@@ -40,16 +40,17 @@ uint64_t get_bit_field(uint64_t source, const uint16_t startBit,
     return int_result;
 }
 
-/**
- * TODO it would be nice to have a warning if you call with this a value that
- * won't fit in the number of bits you've specified it should use.
- */
-void set_bit_field(uint64_t* destination, uint64_t value, const uint16_t offset,
+bool set_bit_field(uint64_t* destination, uint64_t value, const uint16_t offset,
         const uint16_t bit_count) {
+    if(value > bitmask(bit_count)) {
+        return false;
+    }
+
     int shiftDistance = EIGHTBYTE_BIT - offset - bit_count;
     value <<= shiftDistance;
     *destination &= ~(bitmask(bit_count) << shiftDistance);
     *destination |= value;
+    return true;
 }
 
 uint8_t nth_byte(const uint64_t source, const uint16_t byte_index) {
