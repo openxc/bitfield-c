@@ -110,6 +110,9 @@ bool copy_bits_right_aligned(const uint8_t source[], const uint16_t source_lengt
                 const uint16_t offset, const uint16_t bit_count,
                 uint8_t* destination, const uint16_t destination_length);
 
+bool set_nibble(const uint16_t nibble_index, const uint8_t value,
+                uint8_t* destination, const uint16_t destination_length);
+
 #ifdef __cplusplus
 }
 #endif

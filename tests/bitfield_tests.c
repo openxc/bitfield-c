@@ -12,6 +12,20 @@ START_TEST (test_get_byte)
 }
 END_TEST
 
+START_TEST (test_set_nibble)
+{
+    uint8_t data[4] = {0};
+    fail_unless(set_nibble(0, 0x1, data, sizeof(data)));
+    fail_unless(set_nibble(1, 0x2, data, sizeof(data)));
+    fail_unless(set_nibble(2, 0x3, data, sizeof(data)));
+    fail_unless(set_nibble(3, 0x4, data, sizeof(data)));
+    fail_unless(set_nibble(4, 0x5, data, sizeof(data)));
+    ck_assert_int_eq(data[0], 0x12);
+    ck_assert_int_eq(data[1], 0x34);
+    ck_assert_int_eq(data[2], 0x50);
+}
+END_TEST
+
 START_TEST (test_get_nibble)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
@@ -57,6 +71,7 @@ Suite* bitfieldSuite(void) {
     TCase *tc_core = tcase_create("core");
     tcase_add_test(tc_core, test_get_byte);
     tcase_add_test(tc_core, test_get_nibble);
+    tcase_add_test(tc_core, test_set_nibble);
     tcase_add_test(tc_core, test_get_bits);
     tcase_add_test(tc_core, test_get_bits_out_of_range);
     tcase_add_test(tc_core, test_get_uneven_bits);

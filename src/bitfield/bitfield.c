@@ -21,3 +21,9 @@ uint8_t get_byte(const uint8_t source[], const uint8_t source_length,
     }
     return 0;
 }
+
+bool set_nibble(const uint16_t nibble_index, const uint8_t value,
+        uint8_t* destination, const uint16_t destination_length) {
+    return copy_bits(&value, CHAR_BIT, NIBBLE_SIZE, NIBBLE_SIZE, destination,
+            destination_length, nibble_index * NIBBLE_SIZE);
+}
