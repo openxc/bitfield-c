@@ -1,14 +1,14 @@
 #include <bitfield/bitfield.h>
 
-float parseFloat(uint64_t data, uint8_t bitPosition, uint8_t bitSize,
+float bitfield_parse_float(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
         float factor, float offset) {
-    uint64_t rawValue = getBitField(data, bitPosition,
-            bitSize, true);
-    return rawValue * factor + offset;
+    uint64_t raw = get_bit_field(data, bit_offset,
+            bit_size, true);
+    return raw * factor + offset;
 }
 
-bool parseBoolean(uint64_t data, uint8_t bitPosition, uint8_t bitSize,
+bool bitfield_parse_bool(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
         float factor, float offset) {
-    float value = parseFloat(data, bitPosition, bitSize, factor, offset);
+    float value = bitfield_parse_float(data, bit_offset, bit_size, factor, offset);
     return value == 0.0 ? false : true;
 }

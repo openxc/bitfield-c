@@ -4,14 +4,14 @@
 
 START_TEST (test_encode_can_signal)
 {
-    uint64_t value = encodeFloat(0, 1, 3, 1, 0);
+    uint64_t value = bitfield_encode_float(0, 1, 3, 1, 0);
     ck_assert_int_eq(value, 0);
 }
 END_TEST
 
 START_TEST (test_encode_can_signal_rounding_precision)
 {
-    uint64_t value = encodeFloat(50, 2, 19, 0.001, 0);
+    uint64_t value = bitfield_encode_float(50, 2, 19, 0.001, 0);
     ck_assert_int_eq(value, 0x061a800000000000LLU);
 }
 END_TEST

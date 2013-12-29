@@ -8,10 +8,10 @@
 extern "C" {
 #endif
 
-uint64_t encodeFloat(float value, uint8_t bitPosition, uint8_t bitSize,
+uint64_t bitfield_encode_float(float value, uint8_t bit_offset, uint8_t bit_size,
                 float factor, float offset);
 
-uint64_t encodeBoolean(bool value, uint8_t bitPosition, uint8_t bitSize,
+uint64_t bitfield_encode_bool(bool value, uint8_t bit_offset, uint8_t bit_size,
                 float factor, float offset);
 
 #ifdef __cplusplus

@@ -16,10 +16,10 @@ extern "C" {
  *
  * Returns the final, transformed value of the signal.
  */
-float parseFloat(uint64_t data, uint8_t bitPosition, uint8_t bitSize,
+float bitfield_parse_float(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
         float factor, float offset);
 
-bool parseBoolean(uint64_t data, uint8_t bitPosition, uint8_t bitSize,
+bool bitfield_parse_bool(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
         float factor, float offset);
 
 #ifdef __cplusplus
