@@ -193,9 +193,9 @@ END_TEST
 START_TEST (test_get_byte)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
-    uint8_t result = getByte(0, data, sizeof(data));
+    uint8_t result = getByte(data, sizeof(data), 0);
     ck_assert_int_eq(result, 0x12);
-    result = getByte(3, data, sizeof(data));
+    result = getByte(data, sizeof(data), 3);
     ck_assert_int_eq(result, 0x78);
 }
 END_TEST
@@ -203,11 +203,11 @@ END_TEST
 START_TEST (test_get_nibble)
 {
     uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
-    uint8_t result = getNibble(0, data, sizeof(data));
+    uint8_t result = getNibble(data, sizeof(data), 0);
     ck_assert_int_eq(result, 0x1);
-    result = getNibble(1, data, sizeof(data));
+    result = getNibble(data, sizeof(data), 1);
     ck_assert_int_eq(result, 0x2);
-    result = getNibble(2, data, sizeof(data));
+    result = getNibble(data, sizeof(data), 2);
     ck_assert_int_eq(result, 0x3);
 }
 END_TEST

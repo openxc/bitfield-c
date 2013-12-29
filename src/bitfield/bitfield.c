@@ -55,24 +55,21 @@ uint8_t nthByte(const uint64_t source, const uint16_t byteNum) {
     return (source >> (64 - ((byteNum + 1) * CHAR_BIT))) & 0xFF;
 }
 
-uint8_t getNibble(const uint8_t nibble_index, const uint8_t data[],
-        const uint8_t length) {
+uint8_t getNibble(const uint8_t source[], const uint8_t source_length,
+                const uint8_t nibble_index) {
     uint8_t byte_index = nibble_index / 2;
-    uint8_t result;
-    if(byte_index < length) {
-        result = data[byte_index];
-        if(nibble_index % 2 == 0) {
-            result >>= NIBBLE_SIZE;
-        }
+    uint8_t result = getByte(source, source_length, byte_index);
+    if(nibble_index % 2 == 0) {
+        result >>= NIBBLE_SIZE;
     }
     result &= bitmask(NIBBLE_SIZE);
     return result;
 }
 
-uint8_t getByte(const uint8_t byte_index, const uint8_t data[],
-        const uint8_t length) {
-    if(byte_index < length) {
-        return data[byte_index];
+uint8_t getByte(const uint8_t source[], const uint8_t source_length,
+        const uint8_t byte_index) {
+    if(byte_index < source_length) {
+        return source[byte_index];
     }
     return 0;
 }
