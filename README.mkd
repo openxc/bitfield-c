@@ -1,9 +1,8 @@
-CAN Message Utilities for C
+Bitfield Utilities in C
 ===========================
 
 This is a C library with functions to help encode and decode Controller Area
-Network (CAN) message payloads. Some of the bitfield functions may be useful for
-other areas, too.
+Network (CAN) message payloads or other bitfields.
 
 The header files contain complete function documentation, but to get you
 started, here are examples using the API:

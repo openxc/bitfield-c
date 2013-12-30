@@ -1,4 +1,4 @@
-# CAN Message Utilities for C
+# Bitfield Utilities in C
 
 ## v0.1
 
