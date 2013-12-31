@@ -10,14 +10,6 @@ uint64_t bitmask(const uint8_t bit_count) {
     return (((uint64_t)0x1) << bit_count) - 1;
 }
 
-static uint16_t bits_to_bytes(uint32_t bits) {
-    uint8_t byte_count = bits / CHAR_BIT;
-    if(bits % CHAR_BIT != 0) {
-        ++byte_count;
-    }
-    return byte_count;
-}
-
 uint8_t eightbyte_get_nibble(const uint64_t source, const uint8_t nibble_index,
         const bool big_endian) {
     return get_bit_field(source, NIBBLE_SIZE * nibble_index, NIBBLE_SIZE,

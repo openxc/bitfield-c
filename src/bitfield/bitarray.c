@@ -108,6 +108,14 @@ bool copy_bits(const uint8_t* source_origin, const uint16_t source_length,
     return true;
 }
 
+uint16_t bits_to_bytes(uint32_t bits) {
+    uint8_t byte_count = bits / CHAR_BIT;
+    if(bits % CHAR_BIT != 0) {
+        ++byte_count;
+    }
+    return byte_count;
+}
+
 /**
  * Find the ending bit of a bitfield within the final byte.
  *
@@ -125,5 +133,13 @@ bool copy_bits_right_aligned(const uint8_t source[], const uint16_t source_lengt
             destination_length,
             // provide a proper destination offset so the result is right
             // aligned
-            CHAR_BIT - find_end_bit(bit_count));
+            (destination_length - bits_to_bytes(bit_count)) * CHAR_BIT +
+                 CHAR_BIT - find_end_bit(bit_count));
+}
+
+bool copy_bytes_right_aligned(const uint8_t source[], const uint16_t source_length,
+                const uint16_t offset, const uint16_t byte_count,
+                uint8_t* destination, const uint16_t destination_length) {
+    return copy_bits_right_aligned(source, source_length, offset * CHAR_BIT,
+            byte_count * CHAR_BIT, destination, destination_length);
 }

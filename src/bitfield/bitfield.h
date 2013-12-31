@@ -110,8 +110,35 @@ bool copy_bits_right_aligned(const uint8_t source[], const uint16_t source_lengt
                 const uint16_t offset, const uint16_t bit_count,
                 uint8_t* destination, const uint16_t destination_length);
 
+/* Public: Copy a range of bytes from one byte array to another.
+ *
+ * The source and destination do not have to be the same size (as long as the
+ * desitnation has enough room to fit the range).
+ *
+ * source_origin - the source array.
+ * source_length - the total length of the source array in bytes,
+ *      for range checking.
+ * source_offset - a byte offset to start the copy from the source array.
+ *      Specify 0 to start from source_origin.
+ * byte_count - the number of bytes to copy.
+ * destination_origin - the destination array.
+ * desitnation_length - the total length of the destination array in bytes,
+ *      for range checking.
+ * destination_offset - an offset in bytes to start placing the copied range into
+ *      the destination array. Specify 0 to start from the beginning of the
+ *      destination.
+ *
+ * Returns true if the copy was successful and false if the range exceeded the
+ * size of the source or destination, or if the range size negative or 0.
+ */
+bool copy_bytes_right_aligned(const uint8_t source[], const uint16_t source_length,
+                const uint16_t offset, const uint16_t byte_count,
+                uint8_t* destination, const uint16_t destination_length);
+
 bool set_nibble(const uint16_t nibble_index, const uint8_t value,
                 uint8_t* destination, const uint16_t destination_length);
+
+uint16_t bits_to_bytes(uint32_t bits);
 
 #ifdef __cplusplus
 }
