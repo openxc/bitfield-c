@@ -11,24 +11,25 @@ uint64_t bitmask(const uint8_t bit_count) {
 }
 
 uint8_t eightbyte_get_nibble(const uint64_t source, const uint8_t nibble_index,
-        const bool big_endian) {
+        const bool data_is_big_endian) {
     return get_bit_field(source, NIBBLE_SIZE * nibble_index, NIBBLE_SIZE,
-            big_endian);
+            data_is_big_endian);
 }
 
-uint8_t eightbyte_get_byte(const uint64_t source, const uint8_t byte_index,
-        const bool big_endian) {
-    // TODO we're not handling swapped endianness - we could use get_bit_field
-    // but this might be more efficient
+uint8_t eightbyte_get_byte(uint64_t source, const uint8_t byte_index,
+        const bool data_is_big_endian) {
+    if(data_is_big_endian) {
+        source = __builtin_bswap64(source);
+    }
     return (source >> (EIGHTBYTE_BIT - ((byte_index + 1) * CHAR_BIT))) & 0xFF;
 }
 
 uint64_t get_bit_field(uint64_t source, const uint16_t offset,
-        const uint16_t bit_count, const bool big_endian) {
+        const uint16_t bit_count, const bool data_is_big_endian) {
     int startByte = offset / CHAR_BIT;
     int endByte = (offset + bit_count - 1) / CHAR_BIT;
 
-    if(!big_endian) {
+    if(!data_is_big_endian) {
         source = __builtin_bswap64(source);
     }
 

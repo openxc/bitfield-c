@@ -8,25 +8,15 @@
 extern "C" {
 #endif
 
-// TODO using uint64_t everywhere for CAN message payload is kind of cute, but
-// in actuality a CAN message may have a smaller payload, and it makes all of
-// these functions not applicable to other data sizes. It's also fairly
-// inefficient on 32-bit platforms. how much work is it to switch vi-firmware
-// to using uint8_t*?
-
 /* Public: Reads a subset of bits into a uint64_t.
  *
  * source - the bytes in question.
  * offset - the starting index of the bit field (beginning from 0).
  * bit_count - the width of the bit field to extract.
- * big_endian - if the data passed in is little endian, set this to false and it
+ * data_is_big_endian - if the data passed in is little endian, set this to false and it
  *      will be flipped before grabbing the bit field.
  *
- * Bit fields are positioned according to big-endian bit layout, but inside the
- * bit field, values are represented as little-endian. Therefore, to get the bit
- * field, we swap the overall byte order if big_endian == false and
- * use the value we find in the field (assuming the embedded platform is little
- * endian).
+ * Bit fields are positioned according to big-endian bit layout.
  *
  * For example, the bit layout of the value "42" (i.e. 00101010 set at position
  * 14 with length 6 is:
@@ -47,32 +37,32 @@ extern "C" {
  * Returns the value of the requested bit field, right aligned in a uint64_t.
  */
 uint64_t get_bit_field(uint64_t source, const uint16_t offset,
-        const uint16_t bit_count, const bool big_endian);
+        const uint16_t bit_count, const bool data_is_big_endian);
 
 /* Public: Return a single nibble from the payload, with range checking.
  *
  * source - the source payload.
  * nibble_index - the index of the nibble to retreive. The leftmost nibble is
  *      index 0.
- * big_endian - if the data passed in is little endian, set this to false and it
+ * data_is_big_endian - if the data passed in is little endian, set this to false and it
  *      will be flipped before grabbing the bit field.
  *
  * Returns the retreived nibble, right aligned in a uint8_t.
  */
 uint8_t eightbyte_get_nibble(const uint64_t source, const uint8_t nibble_index,
-                const bool big_endian);
+                const bool data_is_big_endian);
 
 /* Public: Return a single byte from the payload, with range checking.
  *
  * source - the source byte array.
  * byte_index - the index of the byte to retreive. The leftmost byte is index 0.
- * big_endian - if the data passed in is little endian, set this to false and it
+ * data_is_big_endian - if the data passed in is little endian, set this to false and it
  *      will be flipped before grabbing the bit field.
  *
  * Returns the retreived byte.
  */
 uint8_t eightbyte_get_byte(const uint64_t source, const uint8_t byte_index,
-                const bool big_endian);
+                const bool data_is_big_endian);
 
 /* Public: Set the bit field in the given data array to the new value.
  *
