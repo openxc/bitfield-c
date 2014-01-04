@@ -36,11 +36,8 @@ END_TEST
 
 START_TEST (test_bitfield_parse_bool)
 {
-    bool result = bitfield_parse_bool(ARRAY_TEST_DATA, sizeof(ARRAY_TEST_DATA),
-            0, 1, 1.0, 0);
-    bool correctResult = true;
-    fail_unless(result == correctResult,
-            "parse is incorrect: %d but should be %d", result, correctResult);
+    fail_unless(bitfield_parse_bool(ARRAY_TEST_DATA, sizeof(ARRAY_TEST_DATA),
+            0, 1, 1.0, 0));
 }
 END_TEST
 

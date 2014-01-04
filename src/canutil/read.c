@@ -23,7 +23,7 @@ float bitfield_parse_float(const uint8_t source[], const uint16_t source_length,
     return raw * factor + offset;
 }
 
-float bitfield_parse_bool(const uint8_t source[], const uint16_t source_length,
+bool bitfield_parse_bool(const uint8_t source[], const uint16_t source_length,
         const uint8_t bit_offset, const uint8_t bit_size, const float factor,
         const float offset) {
     float value = bitfield_parse_float(source, source_length, bit_offset,

@@ -70,7 +70,7 @@ bool eightbyte_parse_bool(uint64_t source, uint8_t bit_offset, uint8_t bit_size,
  *
  * Returns false if the value was 0, otherwise true.
  */
-float bitfield_parse_float(const uint8_t source[], const uint16_t source_size,
+bool bitfield_parse_bool(const uint8_t source[], const uint16_t source_size,
         const uint8_t bit_offset, const uint8_t bit_size, const float factor,
         const float offset);
 
