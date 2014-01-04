@@ -38,6 +38,7 @@ uint64_t get_bitfield(const uint8_t source[], const uint8_t source_length,
         uint64_t whole;
         uint8_t bytes[sizeof(uint64_t)];
     } combined;
+    memset(combined.bytes, 0, sizeof(combined.bytes));
     copy_bits_right_aligned(source, source_length, offset, bit_count,
             combined.bytes, sizeof(combined.bytes));
     if(BYTE_ORDER == LITTLE_ENDIAN) {
