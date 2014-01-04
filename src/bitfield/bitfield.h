@@ -138,7 +138,13 @@ bool copy_bytes_right_aligned(const uint8_t source[], const uint16_t source_leng
 bool set_nibble(const uint16_t nibble_index, const uint8_t value,
                 uint8_t* destination, const uint16_t destination_length);
 
+/* Private:
+ */
 uint16_t bits_to_bytes(uint32_t bits);
+
+/* Private:
+ */
+uint64_t bitmask(const uint8_t bit_count);
 
 #ifdef __cplusplus
 }

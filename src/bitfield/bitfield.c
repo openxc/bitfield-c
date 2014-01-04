@@ -3,6 +3,10 @@
 #include <string.h>
 #include <stddef.h>
 
+uint64_t bitmask(const uint8_t bit_count) {
+    return (((uint64_t)0x1) << bit_count) - 1;
+}
+
 uint8_t get_nibble(const uint8_t source[], const uint8_t source_length,
                 const uint8_t nibble_index) {
     uint8_t byte_index = nibble_index / 2;

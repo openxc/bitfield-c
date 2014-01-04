@@ -6,10 +6,6 @@
 
 #define EIGHTBYTE_BIT (8 * sizeof(uint64_t))
 
-uint64_t bitmask(const uint8_t bit_count) {
-    return (((uint64_t)0x1) << bit_count) - 1;
-}
-
 uint8_t eightbyte_get_nibble(const uint64_t source, const uint8_t nibble_index,
         const bool data_is_big_endian) {
     return get_bit_field(source, NIBBLE_SIZE * nibble_index, NIBBLE_SIZE,

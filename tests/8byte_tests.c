@@ -4,9 +4,6 @@
 
 START_TEST (test_large_bitmask)
 {
-    // yeah, this isn't a public method but I wanted to unit test it to track
-    // down a bug
-    extern uint64_t bitmask(int numBits);
     uint64_t result = bitmask(32);
     fail_if(result != 0xffffffff);
 }

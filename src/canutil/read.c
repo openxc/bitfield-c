@@ -1,4 +1,6 @@
+#include <canutil/read.h>
 #include <bitfield/bitfield.h>
+#include <bitfield/8byte.h>
 
 float bitfield_parse_float(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
         float factor, float offset) {
