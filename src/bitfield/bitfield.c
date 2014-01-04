@@ -2,7 +2,7 @@
 #include <limits.h>
 #include <string.h>
 #include <stddef.h>
-#include <endian.h>
+#include <sys/param.h>
 
 uint64_t bitmask(const uint8_t bit_count) {
     return (((uint64_t)0x1) << bit_count) - 1;
@@ -40,7 +40,10 @@ uint64_t get_bitfield(const uint8_t source[], const uint8_t source_length,
     } combined;
     copy_bits_right_aligned(source, source_length, offset, bit_count,
             combined.bytes, sizeof(combined.bytes));
-    return htobe64(combined.whole);
+    if(BYTE_ORDER == LITTLE_ENDIAN) {
+        combined.whole = __builtin_bswap64(combined.whole);
+    }
+    return combined.whole;
 }
 
 bool set_nibble(const uint16_t nibble_index, const uint8_t value,
