@@ -74,7 +74,7 @@ uint8_t eightbyte_get_byte(const uint64_t source, const uint8_t byte_index,
  * Returns true if the bit_count is enough to fully represent the value, and
  *      false if it will not fit.
  */
-bool eightbyte_set_bit_field(uint64_t* destination, uint64_t value,
+bool eightbyte_set_bitfield(uint64_t* destination, uint64_t value,
         const uint16_t offset, const uint16_t bit_count);
 
 /* Private: Determine the index of the last bit used.

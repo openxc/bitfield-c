@@ -37,7 +37,7 @@ extern "C" {
  *
  * Returns the value of the requested bit field, right aligned in a uint64_t.
  */
-uint64_t get_bits(const uint8_t source[], const uint8_t source_length,
+uint64_t get_bitfield(const uint8_t source[], const uint8_t source_length,
                 const uint16_t offset, const uint16_t bit_count);
 
 /* Public: Return a single nibble from the byte array, with range checking.

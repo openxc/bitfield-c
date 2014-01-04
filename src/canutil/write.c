@@ -12,7 +12,7 @@ uint64_t eightbyte_encode_float(float value, uint8_t bit_offset, uint8_t bit_siz
         raw += 0.5;
     }
     uint64_t result = 0;
-    if(!set_bit_field(&result, (uint64_t)raw, bit_offset, bit_size)) {
+    if(!eightbyte_set_bitfield(&result, (uint64_t)raw, bit_offset, bit_size)) {
         // debug("%f will not fit in a %d bit field", value, bit_size);
     }
     return result;
