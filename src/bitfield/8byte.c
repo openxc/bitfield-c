@@ -36,7 +36,8 @@ uint64_t eightbyte_get_bitfield(uint64_t source, const uint16_t offset,
     uint64_t ret = bytes[startByte];
     if(startByte != endByte) {
         // The lowest byte address contains the most significant bit.
-        for(uint8_t i = startByte + 1; i <= endByte; i++) {
+        uint8_t i;
+        for(i = startByte + 1; i <= endByte; i++) {
             ret = ret << 8;
             ret = ret | bytes[i];
         }
