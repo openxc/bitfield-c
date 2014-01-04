@@ -32,11 +32,11 @@ extern "C" {
  *
  * Examples
  *
- *  uint64_t value = get_bit_field(data, 2, 4);
+ *  uint64_t value = get_bitfield(data, 2, 4);
  *
  * Returns the value of the requested bit field, right aligned in a uint64_t.
  */
-uint64_t eightbyte_get_bit_field(uint64_t source, const uint16_t offset,
+uint64_t eightbyte_get_bitfield(uint64_t source, const uint16_t offset,
         const uint16_t bit_count, const bool data_is_big_endian);
 
 /* Public: Return a single nibble from the payload, with range checking.

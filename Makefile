@@ -1,6 +1,6 @@
 CC = gcc
 INCLUDES = -Isrc
-CFLAGS = $(INCLUDES) -c -w -Wall -Werror -g -ggdb -std=gnu++0x -coverage
+CFLAGS = $(INCLUDES) -c -w -Wall -Werror -g -ggdb -std=gnu99 -coverage
 LDFLAGS = -coverage -lm
 LDLIBS = -lcheck
 
@@ -36,6 +36,7 @@ coverage:
 	@make clean
 	@make test
 	@lcov --base-directory . --directory $(TEST_OBJDIR) -c -o $(TEST_OBJDIR)/coverage.info
+	@lcov --remove $(COVERAGE_INFO_PATH) "/usr/*" -o $(COVERAGE_INFO_PATH)
 	@genhtml -o $(TEST_OBJDIR)/coverage -t "isotp-c test coverage" --num-spaces 4 $(COVERAGE_INFO_PATH)
 	@$(BROWSER) $(TEST_OBJDIR)/coverage/index.html
 	@echo "$(GREEN)Coverage information generated in $(TEST_OBJDIR)/coverage/index.html.$(COLOR_RESET)"

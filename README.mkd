@@ -30,11 +30,11 @@ useful.
 ### 8 Byte Decoding
 
     uint64_t data = 0x8000000000000000;
-    uint64_t result = get_bit_field(data, 0, 1, false);
+    uint64_t result = get_bitfield(data, 0, 1, false);
     // result == 0x1
 
     data = 0x0402574d555a0401;
-    result = get_bit_field(data, 16, 32, false);
+    result = get_bitfield(data, 16, 32, false);
     // result = 0x574d555a;
 
     data = 0x00000000F34DFCFF;
@@ -51,7 +51,7 @@ useful.
 
     uint64_t data = 0;
     fail_unless(set_bit_field(&data, 1, 0, 1));
-    uint64_t result = get_bit_field(data, 0, 1, false);
+    uint64_t result = get_bitfield(data, 0, 1, false);
     ck_assert_int_eq(result, 0x1);
 
 ### CAN Signal Encoding

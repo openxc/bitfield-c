@@ -10,6 +10,36 @@
 extern "C" {
 #endif
 
+/* Public: Reads a subset of bits into a uint64_t, right aligned so they may be
+ * interpreted as a number.
+ *
+ * source - the bytes in question.
+ * source_size - the number of bytes in the source.
+ * offset - the starting index of the bit field (beginning from 0).
+ * bit_count - the width of the bit field to extract. This must be less than or
+ *      equal to 64.
+ *
+ * Bit fields are positioned according to big-endian bit layout and the data is
+ * swapped automatically as necessary depending on the compiled architecture.
+ *
+ * For example, the bit layout of the value "42" (i.e. 00101010 set at position
+ * 14 with length 6 is:
+ *
+ *     000000000000001010100000000000000000000000000000000000000000000
+ *
+ * and the same value and position but with length 8 is:
+ *
+ *     000000000000000010101000000000000000000000000000000000000000000
+ *
+ * Examples
+ *
+ *  uint64_t value = get_bitfield(data, data_size, 2, 4);
+ *
+ * Returns the value of the requested bit field, right aligned in a uint64_t.
+ */
+uint64_t get_bits(const uint8_t source[], const uint8_t source_length,
+                const uint16_t offset, const uint16_t bit_count);
+
 /* Public: Return a single nibble from the byte array, with range checking.
  *
  * source - the source byte array.
@@ -142,7 +172,9 @@ bool set_nibble(const uint16_t nibble_index, const uint8_t value,
  */
 uint16_t bits_to_bytes(uint32_t bits);
 
-/* Private:
+/* Public: Return a right aligned bitmask for a uint64_t.
+ *
+ * bit_count - the number of bits to mask, right aligned.
  */
 uint64_t bitmask(const uint8_t bit_count);
 
