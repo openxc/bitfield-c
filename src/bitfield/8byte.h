@@ -36,7 +36,7 @@ extern "C" {
  *
  * Returns the value of the requested bit field, right aligned in a uint64_t.
  */
-uint64_t get_bit_field(uint64_t source, const uint16_t offset,
+uint64_t eightbyte_get_bit_field(uint64_t source, const uint16_t offset,
         const uint16_t bit_count, const bool data_is_big_endian);
 
 /* Public: Return a single nibble from the payload, with range checking.
@@ -50,7 +50,7 @@ uint64_t get_bit_field(uint64_t source, const uint16_t offset,
  * Returns the retreived nibble, right aligned in a uint8_t.
  */
 uint8_t eightbyte_get_nibble(const uint64_t source, const uint8_t nibble_index,
-                const bool data_is_big_endian);
+        const bool data_is_big_endian);
 
 /* Public: Return a single byte from the payload, with range checking.
  *
@@ -62,7 +62,7 @@ uint8_t eightbyte_get_nibble(const uint64_t source, const uint8_t nibble_index,
  * Returns the retreived byte.
  */
 uint8_t eightbyte_get_byte(const uint64_t source, const uint8_t byte_index,
-                const bool data_is_big_endian);
+        const bool data_is_big_endian);
 
 /* Public: Set the bit field in the given data array to the new value.
  *
@@ -74,8 +74,8 @@ uint8_t eightbyte_get_byte(const uint64_t source, const uint8_t byte_index,
  * Returns true if the bit_count is enough to fully represent the value, and
  *      false if it will not fit.
  */
-bool set_bit_field(uint64_t* destination, uint64_t value, const uint16_t offset,
-        const uint16_t bit_count);
+bool eightbyte_set_bit_field(uint64_t* destination, uint64_t value,
+        const uint16_t offset, const uint16_t bit_count);
 
 /* Private: Determine the index of the last bit used.
  */

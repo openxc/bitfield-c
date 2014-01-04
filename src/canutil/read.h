@@ -20,8 +20,12 @@ extern "C" {
  *
  * Returns the decoded and transformed value of the signal.
  */
-float bitfield_parse_float(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
-        float factor, float offset);
+float eightbyte_parse_float(const uint64_t data, const uint8_t bit_offset,
+        const uint8_t bit_size, const float factor, const float offset);
+
+float bitfield_parse_float(const uint8_t data[], const uint16_t size,
+        const uint8_t bit_offset, const uint8_t bit_size, const float factor,
+        const float offset);
 
 /* Public: Parse a CAN signal from a message and interpret it as a boolean.
  *
@@ -35,7 +39,7 @@ float bitfield_parse_float(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
  *
  * Returns false if the value was 0, otherwise true.
  */
-bool bitfield_parse_bool(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
+bool eightbyte_parse_bool(uint64_t data, uint8_t bit_offset, uint8_t bit_size,
         float factor, float offset);
 
 #ifdef __cplusplus

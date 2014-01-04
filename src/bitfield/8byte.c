@@ -8,7 +8,7 @@
 
 uint8_t eightbyte_get_nibble(const uint64_t source, const uint8_t nibble_index,
         const bool data_is_big_endian) {
-    return get_bit_field(source, NIBBLE_SIZE * nibble_index, NIBBLE_SIZE,
+    return eightbyte_get_bit_field(source, NIBBLE_SIZE * nibble_index, NIBBLE_SIZE,
             data_is_big_endian);
 }
 
@@ -20,7 +20,7 @@ uint8_t eightbyte_get_byte(uint64_t source, const uint8_t byte_index,
     return (source >> (EIGHTBYTE_BIT - ((byte_index + 1) * CHAR_BIT))) & 0xFF;
 }
 
-uint64_t get_bit_field(uint64_t source, const uint16_t offset,
+uint64_t eightbyte_get_bit_field(uint64_t source, const uint16_t offset,
         const uint16_t bit_count, const bool data_is_big_endian) {
     int startByte = offset / CHAR_BIT;
     int endByte = (offset + bit_count - 1) / CHAR_BIT;
