@@ -47,8 +47,8 @@ uint64_t eightbyte_get_bitfield(uint64_t source, const uint16_t offset,
     return ret & bitmask(bit_count);
 }
 
-bool eightbyte_set_bitfield(uint64_t* destination, uint64_t value, const uint16_t offset,
-        const uint16_t bit_count) {
+bool eightbyte_set_bitfield(uint64_t value, const uint16_t offset,
+        const uint16_t bit_count, uint64_t* destination) {
     if(value > bitmask(bit_count)) {
         return false;
     }

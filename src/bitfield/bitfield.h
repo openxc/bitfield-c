@@ -168,6 +168,22 @@ bool copy_bytes_right_aligned(const uint8_t source[], const uint16_t source_leng
 bool set_nibble(const uint16_t nibble_index, const uint8_t value,
                 uint8_t* destination, const uint16_t destination_length);
 
+/* Public: Set the bit field in the given data array to the new value.
+ *
+ * value - the value to set in the bit field.
+ * offset - the starting index of the bit field (beginning from 0).
+ * bit_count - the number of bits to set in the data.
+ * destination - the destination array.
+ * destination_length - the total length of the destination array in bytes,
+ *      for range checking.
+ *
+ * Returns true if the bit_count is enough to fully represent the value, and
+ *      false if it will not fit.
+ */
+bool set_bitfield(const uint64_t value, const uint16_t offset,
+        const uint16_t bit_count, uint8_t destination[],
+        uint16_t destination_length);
+
 /* Private:
  */
 uint16_t bits_to_bytes(uint32_t bits);
@@ -177,6 +193,13 @@ uint16_t bits_to_bytes(uint32_t bits);
  * bit_count - the number of bits to mask, right aligned.
  */
 uint64_t bitmask(const uint8_t bit_count);
+
+/* Private: A union to assist swapping between uint64_t and a uint8_t array.
+ */
+typedef union {
+    uint64_t whole;
+    uint8_t bytes[sizeof(uint64_t)];
+} ArrayOrBytes;
 
 #ifdef __cplusplus
 }

@@ -50,7 +50,7 @@ useful.
 ### 8 Byte Encoding
 
     uint64_t data = 0;
-    fail_unless(8byte_set_bitfield(&data, 1, 0, 1));
+    fail_unless(8byte_set_bitfield(1, 0, 1, &data));
     uint64_t result = eightbyte_get_bitfield(data, 0, 1, false);
     ck_assert_int_eq(result, 0x1);
 

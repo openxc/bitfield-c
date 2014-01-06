@@ -34,10 +34,7 @@ uint64_t get_bitfield(const uint8_t source[], const uint8_t source_length,
         return 0;
     }
 
-    union {
-        uint64_t whole;
-        uint8_t bytes[sizeof(uint64_t)];
-    } combined;
+    ArrayOrBytes combined;
     memset(combined.bytes, 0, sizeof(combined.bytes));
     copy_bits_right_aligned(source, source_length, offset, bit_count,
             combined.bytes, sizeof(combined.bytes));
@@ -53,3 +50,22 @@ bool set_nibble(const uint16_t nibble_index, const uint8_t value,
             destination_length, nibble_index * NIBBLE_SIZE);
 }
 
+bool set_bitfield(const uint64_t value, const uint16_t offset,
+        const uint16_t bit_count, uint8_t destination[],
+        uint16_t destination_length) {
+    if(value > bitmask(bit_count)) {
+        return false;
+    }
+
+    ArrayOrBytes combined = {
+        whole: value
+    };
+
+    if(BYTE_ORDER == LITTLE_ENDIAN) {
+        combined.whole = __builtin_bswap64(combined.whole);
+    }
+
+    return copy_bits(combined.bytes, sizeof(combined.bytes),
+            sizeof(combined.bytes) * CHAR_BIT - bit_count, bit_count,
+            destination, destination_length, offset);
+}
