@@ -1,6 +1,7 @@
 #include <check.h>
 #include <stdint.h>
 #include <bitfield/bitfield.h>
+#include <bitfield/8byte.h>
 
 START_TEST (test_large_bitmask)
 {

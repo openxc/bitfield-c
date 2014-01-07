@@ -1,6 +1,6 @@
 CC = gcc
 INCLUDES = -Isrc
-CFLAGS = $(INCLUDES) -c -w -Wall -Werror -g -ggdb -coverage
+CFLAGS = $(INCLUDES) -c -Wall -Werror -g -ggdb -coverage
 LDFLAGS = -coverage -lm
 LDLIBS = -lcheck
 

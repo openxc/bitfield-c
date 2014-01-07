@@ -8,8 +8,8 @@
 
 uint8_t eightbyte_get_nibble(const uint64_t source, const uint8_t nibble_index,
         const bool data_is_big_endian) {
-    return eightbyte_get_bitfield(source, NIBBLE_SIZE * nibble_index, NIBBLE_SIZE,
-            data_is_big_endian);
+    return (uint8_t) eightbyte_get_bitfield(source, NIBBLE_SIZE * nibble_index,
+            NIBBLE_SIZE, data_is_big_endian);
 }
 
 uint8_t eightbyte_get_byte(uint64_t source, const uint8_t byte_index,
