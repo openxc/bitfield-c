@@ -23,7 +23,7 @@ extern "C" {
  *
  * Returns a big-endian uint64_t with the value encoded as a bitfield.
  */
-uint64_t eightbyte_encode_float(float value, uint8_t bit_offset,
+uint64_t eightbyte_encode_float(double value, uint8_t bit_offset,
         uint8_t bit_size, float factor, float offset);
 
 uint64_t float_to_fixed_point(const double value, const float factor,

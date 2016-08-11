@@ -14,7 +14,7 @@ uint64_t float_to_fixed_point(const double value, const float factor,
     return (uint64_t)raw;
 }
 
-uint64_t eightbyte_encode_float(float value, uint8_t bit_offset, uint8_t bit_size,
+uint64_t eightbyte_encode_float(double value, uint8_t bit_offset, uint8_t bit_size,
         float factor, float offset) {
     uint64_t result = 0;
     if(!eightbyte_set_bitfield(float_to_fixed_point(value, factor, offset),
