@@ -2,7 +2,10 @@
 #include <limits.h>
 #include <string.h>
 #include <stddef.h>
-#include <sys/param.h>
+//#include <sys/param.h>
+
+#define LITTLE_ENDIAN     1
+#define BYTE_ORDER LITTLE_ENDIAN
 
 uint64_t bitmask(const uint8_t bit_count) {
     return (((uint64_t)0x1) << bit_count) - 1;

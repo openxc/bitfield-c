@@ -2,7 +2,7 @@
 #include <bitfield/bitfield.h>
 #include <bitfield/8byte.h>
 
-uint64_t float_to_fixed_point(const float value, const float factor,
+static uint64_t float_to_fixed_point(const float value, const float factor,
         const float offset) {
     float raw = (value - offset) / factor;
     if(raw > 0) {
