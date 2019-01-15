@@ -38,7 +38,7 @@ uint64_t get_bitfield(const uint8_t source[], const uint8_t source_length,
     memset(combined.bytes, 0, sizeof(combined.bytes));
     if(copy_bits_right_aligned(source, source_length, offset, bit_count,
             combined.bytes, sizeof(combined.bytes))) {
-#ifdef  __BYTE_ORDER == __LITTLE_ENDIAN
+#if  __BYTE_ORDER == __LITTLE_ENDIAN
             combined.whole = __builtin_bswap64(combined.whole);
 #endif
     } else {
@@ -64,7 +64,7 @@ bool set_bitfield(const uint64_t value, const uint16_t offset,
         .whole = value
     };
 
-#ifdef  __BYTE_ORDER == __LITTLE_ENDIAN
+#if  __BYTE_ORDER == __LITTLE_ENDIAN
     combined.whole = __builtin_bswap64(combined.whole);
 #endif
 
