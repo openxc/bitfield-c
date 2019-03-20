@@ -1,8 +1,8 @@
 CC = gcc
 INCLUDES = -Isrc
 CFLAGS = $(INCLUDES) -c -Wall -Werror -g -ggdb -coverage
-LDFLAGS = -coverage -lm
-LDLIBS = -lcheck -lsubunit -lrt -std=c++11 -pthread
+LDFLAGS = -coverage -lm -lz -lrt
+LDLIBS = -lcheck -lsubunit -std=c++11 -pthread
 
 TEST_DIR = tests
 TEST_OBJDIR = build
