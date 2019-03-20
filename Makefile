@@ -2,7 +2,7 @@ CC = gcc
 INCLUDES = -Isrc
 CFLAGS = $(INCLUDES) -c -Wall -Werror -g -ggdb -coverage
 LDFLAGS = -coverage -lm
-LDLIBS = -lcheck -lsubunit
+LDLIBS = -lcheck -lsubunit -lrt
 
 TEST_DIR = tests
 TEST_OBJDIR = build
