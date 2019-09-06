@@ -5,8 +5,24 @@
 
 START_TEST (test_large_bitmask)
 {
-    uint64_t result = bitmask(32);
+    // 0 bits
+    uint64_t result = bitmask(0);
+    fail_if(result != 0);
+    // 8 bits
+    result = bitmask(8);
+    fail_if(result != 0xff);
+    // 16 bits
+    result = bitmask(16);
+    fail_if(result != 0xffff);
+    // 32 bits
+    result = bitmask(32);
     fail_if(result != 0xffffffff);
+    // 64 bits
+    result = bitmask(64);
+    fail_if(result != 0xffffffffffffffff);
+    // 128 bits
+    result = bitmask(128);
+    fail_if(result != 0xffffffffffffffff);
 }
 END_TEST
 
