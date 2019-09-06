@@ -28,11 +28,16 @@ END_TEST
 
 START_TEST (test_set_bitfield)
 {
-    uint8_t data[4] = {0};
+    uint8_t data[4] = {0x00, 0x00, 0xFF, 0x00};
     fail_unless(set_bitfield(0x12, 0, 8, data, sizeof(data)));
     fail_unless(set_bitfield(bitmask(3), 10, 3, data, sizeof(data)));
+    fail_unless(set_bitfield(0x01, 16, 3, data, sizeof(data)));
+    fail_unless(set_bitfield(0x01, 31, 1, data, sizeof(data)));
+    fail_unless(set_bitfield(0x01, 30, 1, data, sizeof(data)));
     ck_assert_int_eq(data[0], 0x12);
     ck_assert_int_eq(data[1], 0x38);
+    ck_assert_int_eq(data[2], 0x3F);
+    ck_assert_int_eq(data[3], 0x03);
 }
 END_TEST
 
