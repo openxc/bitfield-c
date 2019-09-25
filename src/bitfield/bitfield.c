@@ -4,8 +4,16 @@
 #include <stddef.h>
 #include <sys/param.h>
 
-uint64_t bitmask(const uint8_t bit_count) {
-    return (((uint64_t)0x1) << bit_count) - 1;
+uint64_t bitmask ( const uint8_t bit_count )
+{
+    if ( 64 == bit_count )
+    {
+        return 0xFFFFFFFFFFFFFFFF;
+    }
+    else
+    {
+        return ( ( ( uint64_t ) 0x1 ) << bit_count ) - 1;
+    }
 }
 
 uint8_t get_nibble(const uint8_t source[], const uint8_t source_length,
@@ -27,7 +35,7 @@ uint8_t get_byte(const uint8_t source[], const uint8_t source_length,
     return 0;
 }
 
-uint64_t get_bitfield(const uint8_t source[], const uint8_t source_length,
+uint64_t get_bitfield(const uint8_t source[], const uint16_t source_length,
                 const uint16_t offset, const uint16_t bit_count) {
     if(bit_count > 64 || bit_count < 1) {
         // TODO error reporting?

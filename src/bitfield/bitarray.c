@@ -10,13 +10,13 @@
         bit_count -= CHAR_BIT - destination_offset_modulo;                  \
     } else {                                                      \
         *destination &= reverse_mask[destination_offset_modulo]               \
-              | reverse_mask_xor[destination_offset_modulo + bit_count + 1];\
+              | reverse_mask_xor[destination_offset_modulo + bit_count];\
          c &= reverse_mask[destination_offset_modulo + bit_count    ];\
         bit_count = 0;                                              \
     } } while (0)
 
 static const uint8_t reverse_mask[] =
-    { 0x55, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff };
+    { 0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff };
 static const uint8_t reverse_mask_xor[] =
     { 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00 };
 

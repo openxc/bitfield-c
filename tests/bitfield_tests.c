@@ -33,6 +33,10 @@ START_TEST (test_set_bitfield)
     fail_unless(set_bitfield(bitmask(3), 10, 3, data, sizeof(data)));
     ck_assert_int_eq(data[0], 0x12);
     ck_assert_int_eq(data[1], 0x38);
+    fail_unless(set_bitfield(0x1, 23, 1, data, sizeof(data)));
+    ck_assert_int_eq(data[2], 0x1);
+    fail_unless(set_bitfield(0x1, 21, 2, data, sizeof(data)));
+    ck_assert_int_eq(data[2], 0x3);
 }
 END_TEST
 
@@ -102,6 +106,14 @@ START_TEST (test_get_uneven_bits)
 }
 END_TEST
 
+START_TEST (test_get_bitfiled)
+{
+    uint8_t data[4] = {0x12, 0x34, 0x56, 0x78};
+    uint64_t result = get_bitfield(data, sizeof(data), 8, 16);
+    ck_assert_int_eq(result, 0x3456);
+}
+END_TEST
+
 Suite* bitfieldSuite(void) {
     Suite* s = suite_create("bitfield");
     TCase *tc_core = tcase_create("core");
@@ -114,6 +126,7 @@ Suite* bitfieldSuite(void) {
     tcase_add_test(tc_core, test_copy_bytes);
     tcase_add_test(tc_core, test_get_bits_out_of_range);
     tcase_add_test(tc_core, test_get_uneven_bits);
+    tcase_add_test(tc_core, test_get_bitfiled);
     suite_add_tcase(s, tc_core);
 
     return s;
