@@ -35,7 +35,7 @@ uint8_t get_byte(const uint8_t source[], const uint8_t source_length,
     return 0;
 }
 
-uint64_t get_bitfield(const uint8_t source[], const uint8_t source_length,
+uint64_t get_bitfield(const uint8_t source[], const uint16_t source_length,
                 const uint16_t offset, const uint16_t bit_count) {
     if(bit_count > 64 || bit_count < 1) {
         // TODO error reporting?
@@ -46,7 +46,7 @@ uint64_t get_bitfield(const uint8_t source[], const uint8_t source_length,
     memset(combined.bytes, 0, sizeof(combined.bytes));
     if(copy_bits_right_aligned(source, source_length, offset, bit_count,
             combined.bytes, sizeof(combined.bytes))) {
-        if(BYTE_ORDER == LITTLE_ENDIAN) {
+        if(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__) {
             combined.whole = __builtin_bswap64(combined.whole);
         }
     } else {
@@ -72,7 +72,7 @@ bool set_bitfield(const uint64_t value, const uint16_t offset,
         whole: value
     };
 
-    if(BYTE_ORDER == LITTLE_ENDIAN) {
+    if(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__) {
         combined.whole = __builtin_bswap64(combined.whole);
     }
 
