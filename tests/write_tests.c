@@ -78,6 +78,15 @@ START_TEST (test_bitfield_encode_bool)
 }
 END_TEST
 
+START_TEST (test_float_to_fixed_point)
+{
+    //uint64_t value = 0x0123456789ABCDEF; //doesn't cast hex string to uint64_t correctly
+    double value = 81985529216486896;
+    uint64_t encoded_value = float_to_fixed_point(value, 1, 0);
+    ck_assert_int_eq(encoded_value, value);
+}
+END_TEST
+
 Suite* canwriteSuite(void) {
     Suite* s = suite_create("write");
     TCase *tc_core = tcase_create("core");
@@ -87,6 +96,7 @@ Suite* canwriteSuite(void) {
     tcase_add_test(tc_core, test_eightbyte_encode_float_precision);
     tcase_add_test(tc_core, test_bitfield_encode_float);
     tcase_add_test(tc_core, test_bitfield_encode_bool);
+    tcase_add_test(tc_core, test_float_to_fixed_point);
     suite_add_tcase(s, tc_core);
 
     return s;
