@@ -69,7 +69,7 @@ bool set_bitfield(const uint64_t value, const uint16_t offset,
     }
 
     ArrayOrBytes combined = {
-        whole: value
+        .whole=value
     };
 
     if(BYTE_ORDER == LITTLE_ENDIAN) {
