@@ -2,7 +2,50 @@
 #include <limits.h>
 #include <string.h>
 #include <stddef.h>
+
+#ifndef _MSC_VER
 #include <sys/param.h>
+
+static inline uint64_t bswap64(uint64_t v)
+{
+    return __builtin_bswap64(v);
+}
+
+static inline bool is_little_endian(void)
+{
+    return BYTE_ORDER == LITTLE_ENDIAN;
+}
+
+#else
+
+static inline uint64_t bswap64(uint64_t v)
+{
+    return  ((v << 56) & 0xff00000000000000ULL) |
+            ((v << 40) & 0x00ff000000000000ULL) |
+            ((v << 24) & 0x0000ff0000000000ULL) |
+            ((v << 8)  & 0x000000ff00000000ULL) |
+            ((v >> 8)  & 0x00000000ff000000ULL) |
+            ((v >> 24) & 0x0000000000ff0000ULL) |
+            ((v >> 40) & 0x000000000000ff00ULL) |
+            ((v >> 56) & 0x00000000000000ffULL);
+}
+
+static inline bool is_little_endian(void)
+{
+    union EndianTest
+    {
+        uint32_t word;
+        uint8_t bytes[4];
+    };
+
+    static const union EndianTest ENDIAN_TEST =
+    {
+        .word = 1
+    };
+
+    return ENDIAN_TEST.bytes[0] == 1;
+}
+#endif
 
 uint64_t bitmask ( const uint8_t bit_count )
 {
@@ -46,8 +89,8 @@ uint64_t get_bitfield(const uint8_t source[], const uint16_t source_length,
     memset(combined.bytes, 0, sizeof(combined.bytes));
     if(copy_bits_right_aligned(source, source_length, offset, bit_count,
             combined.bytes, sizeof(combined.bytes))) {
-        if(BYTE_ORDER == LITTLE_ENDIAN) {
-            combined.whole = __builtin_bswap64(combined.whole);
+        if(is_little_endian()) {
+            combined.whole = bswap64(combined.whole);
         }
     } else {
         // debug("couldn't copy enough bits from source")
@@ -72,8 +115,8 @@ bool set_bitfield(const uint64_t value, const uint16_t offset,
         .whole=value
     };
 
-    if(BYTE_ORDER == LITTLE_ENDIAN) {
-        combined.whole = __builtin_bswap64(combined.whole);
+    if (is_little_endian()) {
+        combined.whole = bswap64(combined.whole);
     }
 
     return copy_bits(combined.bytes, sizeof(combined.bytes),
