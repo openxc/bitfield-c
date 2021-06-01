@@ -46,9 +46,9 @@ uint64_t get_bitfield(const uint8_t source[], const uint16_t source_length,
     memset(combined.bytes, 0, sizeof(combined.bytes));
     if(copy_bits_right_aligned(source, source_length, offset, bit_count,
             combined.bytes, sizeof(combined.bytes))) {
-        if(BYTE_ORDER == LITTLE_ENDIAN) {
+#if  __BYTE_ORDER == __LITTLE_ENDIAN
             combined.whole = __builtin_bswap64(combined.whole);
-        }
+#endif
     } else {
         // debug("couldn't copy enough bits from source")
     }
@@ -69,12 +69,12 @@ bool set_bitfield(const uint64_t value, const uint16_t offset,
     }
 
     ArrayOrBytes combined = {
-        whole: value
+        .whole = value
     };
 
-    if(BYTE_ORDER == LITTLE_ENDIAN) {
-        combined.whole = __builtin_bswap64(combined.whole);
-    }
+#if  __BYTE_ORDER == __LITTLE_ENDIAN
+    combined.whole = __builtin_bswap64(combined.whole);
+#endif
 
     return copy_bits(combined.bytes, sizeof(combined.bytes),
             sizeof(combined.bytes) * CHAR_BIT - bit_count, bit_count,
