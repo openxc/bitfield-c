@@ -26,7 +26,7 @@ extern "C" {
 uint64_t eightbyte_encode_float(double value, uint8_t bit_offset,
         uint8_t bit_size, float factor, float offset);
 
-uint64_t float_to_fixed_point(const float value, const float factor,
+uint64_t float_to_fixed_point(const double value, const float factor,
         const float offset);
         
 bool bitfield_encode_float(const double value, const uint8_t bit_offset,
