@@ -1,5 +1,8 @@
 #include <check.h>
+#include <limits.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 #include <bitfield/bitfield.h>
 
 START_TEST (test_get_byte)
@@ -114,6 +117,120 @@ START_TEST (test_get_bitfiled)
 }
 END_TEST
 
+START_TEST (test_copy_bits_initial_source_boundary)
+{
+    uint8_t source[1] = {0x01};
+    uint8_t destination[1] = {0x55};
+
+    fail_unless(copy_bits(source, sizeof(source), 7, 1, destination,
+                sizeof(destination), 0));
+    ck_assert_int_eq(destination[0], 0xd5);
+}
+END_TEST
+
+START_TEST (test_copy_bits_final_source_boundary)
+{
+    uint8_t source[1] = {0xa7};
+    uint8_t destination[2] = {0x80, 0x55};
+
+    fail_unless(copy_bits(source, sizeof(source), 0, 8, destination,
+                sizeof(destination), 1));
+    ck_assert_int_eq(destination[0], 0xd3);
+    ck_assert_int_eq(destination[1], 0xd5);
+}
+END_TEST
+
+static void reference_copy_bits(const uint8_t* source, uint16_t source_offset,
+        uint16_t bit_count, uint8_t* destination, uint16_t destination_offset) {
+    for(uint16_t bit = 0; bit < bit_count; ++bit) {
+        uint16_t source_bit = source_offset + bit;
+        uint16_t destination_bit = destination_offset + bit;
+        uint8_t mask = 1u << (CHAR_BIT - 1 - destination_bit % CHAR_BIT);
+        if(source[source_bit / CHAR_BIT] &
+                (1u << (CHAR_BIT - 1 - source_bit % CHAR_BIT))) {
+            destination[destination_bit / CHAR_BIT] |= mask;
+        } else {
+            destination[destination_bit / CHAR_BIT] &= ~mask;
+        }
+    }
+}
+
+START_TEST (test_copy_bits_against_reference)
+{
+    const uint8_t patterns[][4] = {
+        {0x96, 0x3d, 0xe2, 0x4b},
+        {0x00, 0x00, 0x00, 0x00},
+        {0xff, 0xff, 0xff, 0xff}
+    };
+
+    for(size_t pattern = 0; pattern < sizeof(patterns) / sizeof(patterns[0]);
+            ++pattern) {
+        for(uint16_t source_length = 1; source_length <= 4; ++source_length) {
+            /* Exact-size allocations expose unnecessary reads under ASan. */
+            uint8_t* source = malloc(source_length);
+            fail_unless(source != NULL);
+            memcpy(source, patterns[pattern], source_length);
+            for(uint16_t destination_length = 1; destination_length <= 4;
+                    ++destination_length) {
+                uint8_t* destination = malloc(destination_length);
+                uint8_t expected[4];
+                fail_unless(destination != NULL);
+                for(uint16_t source_offset = 0;
+                        source_offset < source_length * CHAR_BIT;
+                        ++source_offset) {
+                    for(uint16_t destination_offset = 0;
+                            destination_offset < destination_length * CHAR_BIT;
+                            ++destination_offset) {
+                        uint16_t source_remaining =
+                                source_length * CHAR_BIT - source_offset;
+                        uint16_t destination_remaining =
+                                destination_length * CHAR_BIT - destination_offset;
+                        uint16_t maximum = source_remaining < destination_remaining ?
+                                source_remaining : destination_remaining;
+                        for(uint16_t bit_count = 1; bit_count <= maximum;
+                                ++bit_count) {
+                            memset(destination, 0xa5, destination_length);
+                            memset(expected, 0xa5, destination_length);
+                            reference_copy_bits(source, source_offset, bit_count,
+                                    expected, destination_offset);
+                            fail_unless(copy_bits(source, source_length,
+                                        source_offset, bit_count, destination,
+                                        destination_length, destination_offset));
+                            for(uint16_t byte = 0; byte < destination_length; ++byte) {
+                                ck_assert_int_eq(destination[byte], expected[byte]);
+                            }
+                        }
+                    }
+                }
+                free(destination);
+            }
+            free(source);
+        }
+    }
+}
+END_TEST
+
+START_TEST (test_copy_bits_invalid_ranges)
+{
+    uint8_t source[2] = {0x96, 0x3d};
+    const uint16_t ranges[][3] = {
+        {0, 0, 0},
+        {2 * CHAR_BIT, 1, 0},
+        {0, 2 * CHAR_BIT + 1, 0},
+        {0, 1, CHAR_BIT},
+        {0, CHAR_BIT + 1, 0}
+    };
+
+    for(size_t range = 0; range < sizeof(ranges) / sizeof(ranges[0]); ++range) {
+        uint8_t destination[1] = {0xa5};
+        fail_if(copy_bits(source, sizeof(source), ranges[range][0],
+                    ranges[range][1], destination, sizeof(destination),
+                    ranges[range][2]));
+        ck_assert_int_eq(destination[0], 0xa5);
+    }
+}
+END_TEST
+
 Suite* bitfieldSuite(void) {
     Suite* s = suite_create("bitfield");
     TCase *tc_core = tcase_create("core");
@@ -127,6 +244,10 @@ Suite* bitfieldSuite(void) {
     tcase_add_test(tc_core, test_get_bits_out_of_range);
     tcase_add_test(tc_core, test_get_uneven_bits);
     tcase_add_test(tc_core, test_get_bitfiled);
+    tcase_add_test(tc_core, test_copy_bits_initial_source_boundary);
+    tcase_add_test(tc_core, test_copy_bits_final_source_boundary);
+    tcase_add_test(tc_core, test_copy_bits_against_reference);
+    tcase_add_test(tc_core, test_copy_bits_invalid_ranges);
     suite_add_tcase(s, tc_core);
 
     return s;

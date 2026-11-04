@@ -70,7 +70,9 @@ bool copy_bits(const uint8_t* source_origin, const uint16_t source_length,
             bit_diff_right_shift = CHAR_BIT - bit_diff_left_shift;
 
             c = *source++ << bit_diff_left_shift;
-            c |= *source >> bit_diff_right_shift;
+            if(bit_count > CHAR_BIT - source_offset_modulo) {
+                c |= *source >> bit_diff_right_shift;
+            }
             c &= reverse_mask_xor[destination_offset_modulo];
         } else {
             bit_diff_right_shift = destination_offset_modulo - source_offset_modulo;
@@ -98,7 +100,9 @@ bool copy_bits(const uint8_t* source_origin, const uint16_t source_length,
         int bit_count_modulo = bit_count % CHAR_BIT;
         if(bit_count_modulo > 0) {
             c = *source++ << bit_diff_left_shift;
-            c |= *source >> bit_diff_right_shift;
+            if(bit_count_modulo > bit_diff_right_shift) {
+                c |= *source >> bit_diff_right_shift;
+            }
             c &= reverse_mask[bit_count_modulo];
 
             *destination &= reverse_mask_xor[bit_count_modulo];
